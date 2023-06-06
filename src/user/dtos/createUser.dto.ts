@@ -12,7 +12,7 @@ export class CreateUserDto {
   @IsString()
   phone: string;
 
-  @MinLength(9, { message: 'Número de telefone muito curto!' })
+  @MinLength(9, { message: 'Número CPF muito curto!' })
   @IsString()
   cpf: string;
 

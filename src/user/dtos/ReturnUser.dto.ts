@@ -7,11 +7,11 @@ export class ReturnuserDto {
   phone: string;
   cpf: string;
 
-  constructor(UserEntity: UserEntity) {
-    this.id = UserEntity.id;
-    this.name = UserEntity.name;
-    this.email = UserEntity.email;
-    this.phone = UserEntity.phone;
-    this.cpf = UserEntity.cpf;
+  constructor(user: UserEntity) {
+    this.id = user.id;
+    this.name = user.name;
+    this.email = user.email;
+    this.phone = user.phone;
+    this.cpf = user.cpf;
   }
 }

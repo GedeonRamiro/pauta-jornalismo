@@ -7,7 +7,8 @@ import { UserEntity } from './entities/user.entity';
 /* import { hash } from 'bcrypt'; */
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dtos/createUser.dto';
+import { CreateUserDto } from './dtos/CreateUser.dto';
+import { Role } from 'src/enums/role.enum';
 
 @Injectable()
 export class UserService {
@@ -25,7 +26,7 @@ export class UserService {
 
     return await this.userRepository.save({
       ...createUserDto,
-      typeUser: 1,
+      typeUser: Role.User,
       /* password: passwordHashed, */
     });
   }
@@ -36,7 +37,7 @@ export class UserService {
 
   async getUserById(id: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { id } });
-    if (!user) throw new NotFoundException(`Usuário com id ${id} não existe!`);
+    if (!user) throw new NotFoundException(`Usuário com id: ${id} não existe!`);
 
     return user;
   }
