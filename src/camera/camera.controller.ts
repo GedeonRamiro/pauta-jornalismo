@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { CameraService } from './camera.service';
 import { CreateCameraDto } from './dtos/createCamera.dto';
 import { CameraEntity } from './entities/camera.entity';
@@ -21,5 +21,10 @@ export class CameraController {
       (camera) => new ReturnCameraDto(camera),
     );
     return cameras;
+  }
+
+  @Delete(':id')
+  async deleteCamera(@Param('id') id: string) {
+    return await this.cameraService.deleteCamera(id);
   }
 }

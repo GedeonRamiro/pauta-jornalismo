@@ -1,4 +1,8 @@
-import { BadGatewayException, Injectable } from '@nestjs/common';
+import {
+  BadGatewayException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCameraDto } from './dtos/createCamera.dto';
@@ -19,6 +23,19 @@ export class CameraService {
   async getAllCamera(): Promise<CameraEntity[]> {
     const camera = await this.cameraRepository.find();
     return camera;
+  }
+
+  async getCameraById(id: string): Promise<CameraEntity> {
+    const camera = await this.cameraRepository.findOne({ where: { id } });
+    if (!camera)
+      throw new NotFoundException(`Camera com id: ${id} não existe!`);
+    return camera;
+  }
+
+  async deleteCamera(id: string) {
+    const camera = await this.getCameraById(id);
+    await this.cameraRepository.delete(id);
+    return { message: `${camera.name} excluido com sucesso!` };
   }
 
   async existIdentifierNumberCamera(identifierNumber: number) {
