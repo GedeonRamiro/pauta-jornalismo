@@ -39,11 +39,11 @@ export class CameraService {
   }
 
   async existIdentifierNumberCamera(identifierNumber: number) {
-    const user = await this.cameraRepository.findOneBy({
+    const camera = await this.cameraRepository.findOneBy({
       identifierNumber,
     });
 
-    if (user) {
+    if (camera) {
       throw new BadGatewayException(
         `Número identificador ${identifierNumber} já está sendo usado!`,
       );
