@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UsersModule } from './user/users.module';
+import { CameraModule } from './camera/camera.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { UsersModule } from './user/users.module';
       entities: [`${__dirname}/**/*.entity{.js,.ts}`],
     }),
     UsersModule,
+    CameraModule,
   ],
 
   providers: [],
