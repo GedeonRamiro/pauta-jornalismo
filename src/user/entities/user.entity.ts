@@ -1,3 +1,4 @@
+import { PautaEntity } from 'src/pauta/entities/pauta.entity';
 import {
   Column,
   Entity,
@@ -5,6 +6,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Unique,
+  OneToMany,
 } from 'typeorm';
 
 @Entity({ name: 'user' })
@@ -35,4 +37,7 @@ export class UserEntity {
 
   @CreateDateColumn({ name: 'updated_at' })
   updateAt: Date;
+
+  @OneToMany(() => PautaEntity, (pauta) => pauta.user)
+  pauta?: PautaEntity[];
 }

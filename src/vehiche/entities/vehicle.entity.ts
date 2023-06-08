@@ -7,16 +7,22 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity({ name: 'camera' })
-export class CameraEntity {
+@Entity({ name: 'vehicle' })
+export class VehicleEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'name', nullable: false })
-  name: string;
+  @Column({ name: 'model', nullable: false })
+  model: string;
 
-  @Column({ name: 'identifier_number', nullable: false, unique: true })
-  identifierNumber: number;
+  @Column({ name: 'manufacturer', nullable: false })
+  manufacturer: string;
+
+  @Column({ name: 'plate', nullable: false, unique: true })
+  plate: string;
+
+  @Column({ name: 'color', nullable: false })
+  color: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

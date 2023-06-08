@@ -21,12 +21,13 @@
     "typeorm:ts": "typeorm-ts-node-esm",
     "migrate:up": "npm run typeorm:ts migration:run -- -d ./typeorm/data-source.ts",
     "migrate:down": "npm run typeorm:ts migration:revert -- -d ./typeorm/data-source.ts",
-    "migrate:create": "npm run typeorm:ts migration:create -- ./typeorm/migrations/CreateTableCamera"
+    "migrate:create": "npm run typeorm:ts migration:create -- ./typeorm/migrations/CreateTablePauta"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.2",
     "@nestjs/core": "^9.0.0",
+    "@nestjs/jwt": "^10.0.3",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/typeorm": "^9.0.1",
     "bcrypt": "^5.1.0",

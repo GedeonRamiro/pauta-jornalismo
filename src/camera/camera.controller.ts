@@ -23,6 +23,11 @@ export class CameraController {
     return cameras;
   }
 
+  @Get(':id')
+  async getUserById(@Param('id') id: string): Promise<ReturnCameraDto> {
+    return new ReturnCameraDto(await this.cameraService.getCameraById(id));
+  }
+
   @Delete(':id')
   async deleteCamera(@Param('id') id: string) {
     return await this.cameraService.deleteCamera(id);

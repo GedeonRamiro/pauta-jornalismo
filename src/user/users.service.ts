@@ -42,6 +42,34 @@ export class UserService {
     return user;
   }
 
+  async findUserByEmail(email: string): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`Email: ${email} Not Found`);
+    }
+
+    return user;
+  }
+
+  async isMatchPassword(password: string) {
+    const user = await this.userRepository.findOne({
+      where: {
+        password,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException(`Password: ${password} Not Found`);
+    }
+
+    return true;
+  }
+
   async existEmail(email: string) {
     const user = await this.userRepository.findOneBy({
       email,
