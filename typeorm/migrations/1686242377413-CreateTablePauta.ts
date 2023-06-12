@@ -35,7 +35,7 @@ export class CreateTablePauta1686242377413 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'pauta',
+            name: 'name',
             type: 'varchar',
             length: '255',
             isNullable: false,

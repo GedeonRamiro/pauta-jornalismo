@@ -28,8 +28,8 @@ export class PautaEntity {
   @Column({ name: 'name', nullable: true })
   name: string;
 
-  @Column({ name: 'information', nullable: false })
-  information: string;
+  @Column({ name: 'infomation', nullable: false })
+  infomation: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
