@@ -1,11 +1,13 @@
+import { ReturnPautaDto } from 'src/pauta/dtos/ReturnPauta.dto';
 import { UserEntity } from '../entities/user.entity';
 
-export class ReturnuserDto {
+export class ReturnUserDto {
   id: string;
   name: string;
   email: string;
   phone: string;
   cpf: string;
+  pauta: ReturnPautaDto[];
 
   constructor(user: UserEntity) {
     this.id = user.id;
@@ -13,5 +15,8 @@ export class ReturnuserDto {
     this.email = user.email;
     this.phone = user.phone;
     this.cpf = user.cpf;
+    this.pauta = user.pauta
+      ? user.pauta.map((pauta) => new ReturnPautaDto(pauta))
+      : undefined;
   }
 }
