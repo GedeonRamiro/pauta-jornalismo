@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { CreateVehicleDto } from './dtos/CreateVehicle.dto';
 import { ReturnVehicleDto } from './dtos/ReturnVehicle.dto';
 import { VehicleEntity } from './entities/vehicle.entity';
@@ -9,6 +18,7 @@ export class VehicleController {
   constructor(private readonly vehicleService: VehicleService) {}
 
   @Post()
+  @UsePipes(ValidationPipe)
   async createVehicle(
     @Body() createVehicle: CreateVehicleDto,
   ): Promise<VehicleEntity> {
