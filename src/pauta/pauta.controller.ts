@@ -9,8 +9,8 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { UserId } from 'src/decorator/user-id.decorator';
-import { CreatePautaDto } from './dtos/CreatePautaDto';
-import { ReturnPautaDto } from './dtos/ReturnPautaDto';
+import { CreatePautaDto } from './dtos/CreatePauta.dto';
+import { ReturnPautaDto } from './dtos/ReturnPauta.dto';
 import { PautaEntity } from './entities/pauta.entity';
 import { PautaService } from './pauta.service';
 

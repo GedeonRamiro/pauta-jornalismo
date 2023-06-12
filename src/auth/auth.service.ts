@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare } from 'bcrypt';
-import { ReturnuserDto } from 'src/user/dtos/ReturnUser.dto';
+import { ReturnUserDto } from 'src/user/dtos/ReturnUser.dto';
 import { UserService } from 'src/user/users.service';
 import { LoginDto } from './dto/LoginDto';
 import { LoginPayloadDto } from './dto/LoginPayloadDto';
@@ -30,7 +30,7 @@ export class AuthService {
       accessToken: await this.jwtService.signAsync({
         ...new LoginPayloadDto(user),
       }),
-      user: new ReturnuserDto(user),
+      user: new ReturnUserDto(user),
     };
   }
 }

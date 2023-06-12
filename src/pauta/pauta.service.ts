@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreatePautaDto } from './dtos/CreatePautaDto';
+import { CreatePautaDto } from './dtos/CreatePauta.dto';
 import { PautaEntity } from './entities/pauta.entity';
 
 @Injectable()

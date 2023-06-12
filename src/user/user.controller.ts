@@ -9,9 +9,8 @@ import {
 } from '@nestjs/common';
 import { UserEntity } from './entities/user.entity';
 import { CreateUserDto } from './dtos/CreateUser.dto';
-
 import { UserService } from './users.service';
-import { ReturnuserDto } from './dtos/ReturnUser.dto';
+import { ReturnUserDto } from './dtos/ReturnUser.dto';
 import { Roles } from 'src/decorator/roles.decorator';
 import { UserType } from './enums/role.enum';
 
@@ -27,9 +26,9 @@ export class UserController {
 
   @Roles(UserType.User)
   @Get()
-  async getAllUser(): Promise<ReturnuserDto[]> {
+  async getAllUser(): Promise<ReturnUserDto[]> {
     const users = (await this.userService.getAlUser()).map(
-      (user) => new ReturnuserDto(user),
+      (user) => new ReturnUserDto(user),
     );
 
     return users;
@@ -37,7 +36,7 @@ export class UserController {
 
   @Roles(UserType.User)
   @Get(':id')
-  async getUserById(@Param('id') id: string): Promise<ReturnuserDto> {
-    return new ReturnuserDto(await this.userService.getUserById(id));
+  async getUserById(@Param('id') id: string): Promise<ReturnUserDto> {
+    return new ReturnUserDto(await this.userService.getUserById(id));
   }
 }
