@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { CameraService } from './camera.service';
 import { CreateCameraDto } from './dtos/createCamera.dto';
 import { CameraEntity } from './entities/camera.entity';
@@ -8,6 +17,7 @@ import { ReturnCameraDto } from './dtos/ReturnCamera.dto';
 export class CameraController {
   constructor(private readonly cameraService: CameraService) {}
 
+  @UsePipes(ValidationPipe)
   @Post()
   async createCamera(
     @Body() createCamera: CreateCameraDto,
@@ -24,7 +34,7 @@ export class CameraController {
   }
 
   @Get(':id')
-  async getUserById(@Param('id') id: string): Promise<ReturnCameraDto> {
+  async getCameraById(@Param('id') id: string): Promise<ReturnCameraDto> {
     return new ReturnCameraDto(await this.cameraService.getCameraById(id));
   }
 
