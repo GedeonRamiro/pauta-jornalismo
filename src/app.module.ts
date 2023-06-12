@@ -7,6 +7,9 @@ import { CameraModule } from './camera/camera.module';
 import { VehicleModule } from './vehiche/vehicle.module';
 import { AuthModule } from './auth/auth.module';
 import { PautaModule } from './pauta/pauta.module';
+import { RolesGuard } from './guards/roles.guard';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -23,8 +26,14 @@ import { PautaModule } from './pauta/pauta.module';
     VehicleModule,
     AuthModule,
     PautaModule,
+    JwtModule,
   ],
 
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}

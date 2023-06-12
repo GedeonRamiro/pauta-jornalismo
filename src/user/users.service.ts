@@ -8,7 +8,7 @@ import { UserEntity } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/CreateUser.dto';
-import { Role } from 'src/enums/role.enum';
+import { UserType } from 'src/user/enums/role.enum';
 
 @Injectable()
 export class UserService {
@@ -18,7 +18,7 @@ export class UserService {
   ) {}
 
   async createUser(createUserDto: CreateUserDto) {
-    const saltOrRounds = 10;
+    //const saltOrRounds = 10;
 
     /* const passwordHashed = await hash(createUserDto.password, saltOrRounds); */
 
@@ -26,7 +26,7 @@ export class UserService {
 
     return await this.userRepository.save({
       ...createUserDto,
-      typeUser: Role.User,
+      typeUser: UserType.User,
       /* password: passwordHashed, */
     });
   }
