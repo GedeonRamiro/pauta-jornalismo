@@ -11,9 +11,11 @@ export class PautaService {
     private readonly pautaRepository: Repository<PautaEntity>,
   ) {}
 
-  async createPauta(createPautaDto: CreatePautaDto) {
-    console.log('createPautaService:', createPautaDto);
-    return await this.pautaRepository.save(createPautaDto);
+  async createPauta(createPautaDto: CreatePautaDto, userId: string) {
+    return await this.pautaRepository.save({
+      ...createPautaDto,
+      userId,
+    });
   }
 
   async getAllPauta(): Promise<PautaEntity[]> {

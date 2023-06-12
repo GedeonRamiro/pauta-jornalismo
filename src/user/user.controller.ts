@@ -15,7 +15,6 @@ import { ReturnuserDto } from './dtos/ReturnUser.dto';
 import { Roles } from 'src/decorator/roles.decorator';
 import { UserType } from './enums/role.enum';
 
-@Roles(UserType.Admin)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -26,6 +25,7 @@ export class UserController {
     return await this.userService.createUser(createUser);
   }
 
+  @Roles(UserType.User)
   @Get()
   async getAllUser(): Promise<ReturnuserDto[]> {
     const users = (await this.userService.getAlUser()).map(
@@ -35,6 +35,7 @@ export class UserController {
     return users;
   }
 
+  @Roles(UserType.User)
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<ReturnuserDto> {
     return new ReturnuserDto(await this.userService.getUserById(id));

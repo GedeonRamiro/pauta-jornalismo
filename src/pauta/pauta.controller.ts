@@ -8,6 +8,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { UserId } from 'src/decorator/user-id.decorator';
 import { CreatePautaDto } from './dtos/CreatePautaDto';
 import { ReturnPautaDto } from './dtos/ReturnPautaDto';
 import { PautaEntity } from './entities/pauta.entity';
@@ -19,9 +20,11 @@ export class PautaController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  async createPauta(@Body() createPauta: CreatePautaDto): Promise<PautaEntity> {
-    console.log('createPautaControlller:', createPauta);
-    return await this.pautaService.createPauta(createPauta);
+  async createPauta(
+    @Body() createPauta: CreatePautaDto,
+    @UserId('userId') userId: string,
+  ): Promise<PautaEntity> {
+    return await this.pautaService.createPauta(createPauta, userId);
   }
 
   @Get()
