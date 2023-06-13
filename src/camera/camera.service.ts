@@ -26,7 +26,12 @@ export class CameraService {
   }
 
   async getCameraById(id: string): Promise<CameraEntity> {
-    const camera = await this.cameraRepository.findOne({ where: { id } });
+    const camera = await this.cameraRepository.findOne({
+      where: { id },
+      relations: {
+        pauta: true,
+      },
+    });
     if (!camera)
       throw new NotFoundException(`Camera com id: ${id} não existe!`);
     return camera;

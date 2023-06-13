@@ -24,6 +24,6 @@ export class CameraEntity {
   @CreateDateColumn({ name: 'updated_at' })
   updateAt: Date;
 
-  @OneToMany(() => PautaEntity, (pauta) => pauta.user)
+  @OneToMany(() => PautaEntity, (pauta) => pauta.camera)
   pauta?: PautaEntity[];
 }
