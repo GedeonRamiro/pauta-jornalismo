@@ -21,8 +21,7 @@ export class VehicleService {
   }
 
   async getAllVehicle(): Promise<VehicleEntity[]> {
-    const vehicle = await this.vehicleRepository.find();
-    return vehicle;
+    return await this.vehicleRepository.find();
   }
 
   async getVehicleById(id: string): Promise<VehicleEntity> {

@@ -4,7 +4,9 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
+  Put,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -12,6 +14,7 @@ import { CameraService } from './camera.service';
 import { CreateCameraDto } from './dtos/createCamera.dto';
 import { CameraEntity } from './entities/camera.entity';
 import { ReturnCameraDto } from './dtos/ReturnCamera.dto';
+import { UpdateCameraDto } from './dtos/UpdateCamera.dto';
 
 @Controller('camera')
 export class CameraController {
@@ -36,6 +39,16 @@ export class CameraController {
   @Get(':id')
   async getCameraById(@Param('id') id: string): Promise<ReturnCameraDto> {
     return new ReturnCameraDto(await this.cameraService.getCameraById(id));
+  }
+
+  @Patch(':id')
+  async updatePatchCamera(
+    @Param('id') id: string,
+    @Body() updatePutCamera: UpdateCameraDto,
+  ): Promise<ReturnCameraDto> {
+    return new ReturnCameraDto(
+      await this.cameraService.updatePatchCamera(id, updatePutCamera),
+    );
   }
 
   @Delete(':id')

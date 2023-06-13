@@ -6,6 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateCameraDto } from './dtos/createCamera.dto';
+import { UpdateCameraDto } from './dtos/UpdateCamera.dto';
 import { CameraEntity } from './entities/camera.entity';
 
 @Injectable()
@@ -21,8 +22,7 @@ export class CameraService {
   }
 
   async getAllCamera(): Promise<CameraEntity[]> {
-    const camera = await this.cameraRepository.find();
-    return camera;
+    return await this.cameraRepository.find();
   }
 
   async getCameraById(id: string): Promise<CameraEntity> {
@@ -35,6 +35,20 @@ export class CameraService {
     if (!camera)
       throw new NotFoundException(`Camera com id: ${id} não existe!`);
     return camera;
+  }
+
+  async updatePatchCamera(id: string, updateCameraDto: UpdateCameraDto) {
+    if (updateCameraDto.identifierNumber) {
+      await this.existIdentifierNumberCamera(updateCameraDto.identifierNumber);
+    }
+    updateCameraDto.updateAt = new Date();
+
+    const camera = await this.cameraRepository.update(id, updateCameraDto);
+
+    if (!camera) {
+      throw new NotFoundException('Propriedade passada no body inválida!');
+    }
+    return this.getCameraById(id);
   }
 
   async deleteCamera(id: string) {
