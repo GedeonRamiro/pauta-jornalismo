@@ -30,6 +30,6 @@ export class VehicleEntity {
   @CreateDateColumn({ name: 'updated_at' })
   updateAt: Date;
 
-  @OneToMany(() => PautaEntity, (pauta) => pauta.user)
+  @OneToMany(() => PautaEntity, (pauta) => pauta.vehicle)
   pauta?: PautaEntity[];
 }

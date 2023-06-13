@@ -1,3 +1,4 @@
+import { ReturnPautaDto } from 'src/pauta/dtos/ReturnPauta.dto';
 import { VehicleEntity } from '../entities/vehicle.entity';
 
 export class ReturnVehicleDto {
@@ -6,12 +7,16 @@ export class ReturnVehicleDto {
   manufacturer: string;
   plate: string;
   color: string;
+  pauta: ReturnPautaDto[];
 
-  constructor(camera: VehicleEntity) {
-    this.id = camera.id;
-    this.model = camera.model;
-    this.manufacturer = camera.manufacturer;
-    this.plate = camera.plate;
-    this.color = camera.color;
+  constructor(vehicle: VehicleEntity) {
+    this.id = vehicle.id;
+    this.model = vehicle.model;
+    this.manufacturer = vehicle.manufacturer;
+    this.plate = vehicle.plate;
+    this.color = vehicle.color;
+    this.pauta = vehicle.pauta
+      ? vehicle.pauta.map((pauta) => new ReturnPautaDto(pauta))
+      : undefined;
   }
 }

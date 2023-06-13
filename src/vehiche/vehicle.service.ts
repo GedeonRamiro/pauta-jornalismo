@@ -26,7 +26,12 @@ export class VehicleService {
   }
 
   async getVehicleById(id: string): Promise<VehicleEntity> {
-    const vehicle = await this.vehicleRepository.findOne({ where: { id } });
+    const vehicle = await this.vehicleRepository.findOne({
+      where: { id },
+      relations: {
+        pauta: true,
+      },
+    });
     if (!vehicle)
       throw new NotFoundException(`Veículo com id: ${id} não existe!`);
     return vehicle;
