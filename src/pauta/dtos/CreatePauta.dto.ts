@@ -1,9 +1,10 @@
 import { IsString, MinLength } from 'class-validator';
 
 export class CreatePautaDto {
+  @IsString({ message: 'Id da camera deve ser uma string!' })
   cameraId: string;
 
-  @MinLength(3, { message: 'Nome do veículo muito curto!' })
+  @IsString({ message: 'Id do veículo deve ser uma string!' })
   vehicleId: string;
 
   @MinLength(3, { message: 'Nome da puata muito curta!' })
