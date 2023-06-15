@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { VehicleEntity } from './entities/vehicle.entity';
 import { CreateVehicleDto } from './dtos/CreateVehicle.dto';
+import { UpDateVehicleDto } from './dtos/UpdateVehicle.dto';
 
 @Injectable()
 export class VehicleService {
@@ -34,6 +35,25 @@ export class VehicleService {
     if (!vehicle)
       throw new NotFoundException(`Veículo com id: ${id} não existe!`);
     return vehicle;
+  }
+
+  async updatePatchVehicle(id: string, updateVehicleDto: UpDateVehicleDto) {
+    const vehicle = await this.getVehicleById(id);
+
+    if (vehicle.plate !== updateVehicleDto.plate && updateVehicleDto.plate) {
+      await this.existPlateVehicle(updateVehicleDto.plate);
+    }
+    updateVehicleDto.updateAt = new Date();
+
+    const vehicleUpdate = await this.vehicleRepository.update(
+      id,
+      updateVehicleDto,
+    );
+
+    if (!vehicleUpdate) {
+      throw new NotFoundException('Propriedade passada no body inválida!');
+    }
+    return this.getVehicleById(id);
   }
 
   async deleteVehicle(id: string) {

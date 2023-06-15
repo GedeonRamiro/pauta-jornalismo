@@ -4,12 +4,14 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { CreateVehicleDto } from './dtos/CreateVehicle.dto';
 import { ReturnVehicleDto } from './dtos/ReturnVehicle.dto';
+import { UpDateVehicleDto } from './dtos/UpdateVehicle.dto';
 import { VehicleEntity } from './entities/vehicle.entity';
 import { VehicleService } from './vehicle.service';
 
@@ -36,6 +38,16 @@ export class VehicleController {
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<ReturnVehicleDto> {
     return new ReturnVehicleDto(await this.vehicleService.getVehicleById(id));
+  }
+
+  @Patch(':id')
+  async updatePatchVehicle(
+    @Param('id') id: string,
+    @Body() updatePutCamera: UpDateVehicleDto,
+  ): Promise<ReturnVehicleDto> {
+    return new ReturnVehicleDto(
+      await this.vehicleService.updatePatchVehicle(id, updatePutCamera),
+    );
   }
 
   @Delete(':id')
