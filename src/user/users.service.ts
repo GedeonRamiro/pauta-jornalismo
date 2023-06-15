@@ -9,6 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 import { UserType } from 'src/user/enums/role.enum';
+import { UpdateUserDto } from './dtos/UpdateUser.dto';
 
 @Injectable()
 export class UserService {
@@ -59,6 +60,16 @@ export class UserService {
     }
 
     return user;
+  }
+
+  async updatePutUser(id: string, updateuserDto: UpdateUserDto) {
+    updateuserDto.updateAt = new Date();
+    const userUpdate = await this.userRepository.update(id, updateuserDto);
+
+    if (!userUpdate) {
+      throw new NotFoundException('Propriedade passada no body inválida!');
+    }
+    return this.getUserById(id);
   }
 
   async isMatchPassword(password: string) {

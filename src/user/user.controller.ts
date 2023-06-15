@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -13,6 +14,7 @@ import { UserService } from './users.service';
 import { ReturnUserDto } from './dtos/ReturnUser.dto';
 import { Roles } from 'src/decorator/roles.decorator';
 import { UserType } from './enums/role.enum';
+import { UpdateUserDto } from './dtos/UpdateUser.dto';
 
 @Controller('user')
 export class UserController {
@@ -38,5 +40,16 @@ export class UserController {
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<ReturnUserDto> {
     return new ReturnUserDto(await this.userService.getUserById(id));
+  }
+
+  @UsePipes(ValidationPipe)
+  @Put(':id')
+  async updatePutUser(
+    @Param('id') id: string,
+    @Body() updatePutUser: UpdateUserDto,
+  ): Promise<ReturnUserDto> {
+    return new ReturnUserDto(
+      await this.userService.updatePutUser(id, updatePutUser),
+    );
   }
 }
