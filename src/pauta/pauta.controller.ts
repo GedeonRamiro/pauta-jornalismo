@@ -5,12 +5,14 @@ import {
   Get,
   Param,
   Post,
+  Put,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { UserId } from 'src/decorator/user-id.decorator';
 import { CreatePautaDto } from './dtos/CreatePauta.dto';
 import { ReturnPautaDto } from './dtos/ReturnPauta.dto';
+import { UpdatePautaDto } from './dtos/UpdatePauta.dto';
 import { PautaEntity } from './entities/pauta.entity';
 import { PautaService } from './pauta.service';
 
@@ -38,6 +40,17 @@ export class PautaController {
   @Get(':id')
   async getPautaById(@Param('id') id: string): Promise<ReturnPautaDto> {
     return new ReturnPautaDto(await this.pautaService.getPautaById(id));
+  }
+
+  @UsePipes(ValidationPipe)
+  @Put(':id')
+  async updatePutUser(
+    @Param('id') id: string,
+    @Body() updatePutUser: UpdatePautaDto,
+  ): Promise<ReturnPautaDto> {
+    return new ReturnPautaDto(
+      await this.pautaService.updatePutPauta(id, updatePutUser),
+    );
   }
 
   @Delete(':id')

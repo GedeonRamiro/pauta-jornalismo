@@ -35,7 +35,7 @@ export class PautaEntity {
   createdAt: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updateAt: Date;
 
   @ManyToOne(() => UserEntity, (user) => user.pauta)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })

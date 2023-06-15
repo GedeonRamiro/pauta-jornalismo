@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreatePautaDto } from './dtos/CreatePauta.dto';
+import { UpdatePautaDto } from './dtos/UpdatePauta.dto';
 import { PautaEntity } from './entities/pauta.entity';
 
 @Injectable()
@@ -34,6 +35,16 @@ export class PautaService {
     });
     if (!pauta) throw new NotFoundException(`Pauta com id: ${id} não existe!`);
     return pauta;
+  }
+
+  async updatePutPauta(id: string, updatePautaDto: UpdatePautaDto) {
+    updatePautaDto.updateAt = new Date();
+    const userUpdate = await this.pautaRepository.update(id, updatePautaDto);
+
+    if (!userUpdate) {
+      throw new NotFoundException('Propriedade passada no body inválida!');
+    }
+    return this.getPautaById(id);
   }
 
   async deletePauta(id: string) {
