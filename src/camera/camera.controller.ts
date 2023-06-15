@@ -6,7 +6,6 @@ import {
   Param,
   Patch,
   Post,
-  Put,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -41,6 +40,7 @@ export class CameraController {
     return new ReturnCameraDto(await this.cameraService.getCameraById(id));
   }
 
+  @UsePipes(ValidationPipe)
   @Patch(':id')
   async updatePatchCamera(
     @Param('id') id: string,

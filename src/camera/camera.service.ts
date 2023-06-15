@@ -38,14 +38,22 @@ export class CameraService {
   }
 
   async updatePatchCamera(id: string, updateCameraDto: UpdateCameraDto) {
-    if (updateCameraDto.identifierNumber) {
+    const camera = await this.getCameraById(id);
+
+    if (
+      updateCameraDto.identifierNumber &&
+      camera.identifierNumber !== updateCameraDto.identifierNumber
+    ) {
       await this.existIdentifierNumberCamera(updateCameraDto.identifierNumber);
     }
     updateCameraDto.updateAt = new Date();
 
-    const camera = await this.cameraRepository.update(id, updateCameraDto);
+    const cameraUpdate = await this.cameraRepository.update(
+      id,
+      updateCameraDto,
+    );
 
-    if (!camera) {
+    if (!cameraUpdate) {
       throw new NotFoundException('Propriedade passada no body inválida!');
     }
     return this.getCameraById(id);

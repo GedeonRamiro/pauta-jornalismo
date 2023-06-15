@@ -3,12 +3,20 @@ import {
   IsNotEmpty,
   IsNumber,
   IsOptional,
-  IsString,
   MinLength,
 } from 'class-validator';
 import { CreateCameraDto } from './createCamera.dto';
 
 export class UpdateCameraDto extends CreateCameraDto {
+  @IsOptional()
+  @MinLength(3, { message: 'Nome muito curto!' })
+  name: string;
+
+  @IsOptional()
+  @IsNotEmpty()
+  @IsNumber()
+  identifierNumber: number;
+
   @IsOptional()
   @IsDate()
   updateAt: Date;
