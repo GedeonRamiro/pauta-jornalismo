@@ -62,14 +62,20 @@ export class UserService {
     return user;
   }
 
-  async updatePutUser(id: string, updateuserDto: UpdateUserDto) {
-    updateuserDto.updateAt = new Date();
-    const userUpdate = await this.userRepository.update(id, updateuserDto);
+  async updatePutUser(id: string, updateUserDto: UpdateUserDto) {
+    updateUserDto.updateAt = new Date();
+    const userUpdate = await this.userRepository.update(id, updateUserDto);
 
     if (!userUpdate) {
       throw new NotFoundException('Propriedade passada no body inválida!');
     }
     return this.getUserById(id);
+  }
+
+  async deleteUser(id: string) {
+    const user = await this.getUserById(id);
+    await this.userRepository.delete(id);
+    return { message: `${user.name} excluido com sucesso!` };
   }
 
   async isMatchPassword(password: string) {

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -51,5 +52,10 @@ export class UserController {
     return new ReturnUserDto(
       await this.userService.updatePutUser(id, updatePutUser),
     );
+  }
+
+  @Delete(':id')
+  async deleteUser(@Param('id') id: string) {
+    return await this.userService.deleteUser(id);
   }
 }
