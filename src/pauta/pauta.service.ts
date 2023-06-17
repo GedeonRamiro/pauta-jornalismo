@@ -1,5 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CameraService } from 'src/camera/camera.service';
+import { UserService } from 'src/user/users.service';
+import { VehicleService } from 'src/vehiche/vehicle.service';
 import { Repository } from 'typeorm';
 import { CreatePautaDto } from './dtos/CreatePauta.dto';
 import { UpdatePautaDto } from './dtos/UpdatePauta.dto';
@@ -10,9 +13,16 @@ export class PautaService {
   constructor(
     @InjectRepository(PautaEntity)
     private readonly pautaRepository: Repository<PautaEntity>,
+    private readonly userService: UserService,
+    private readonly vehicleService: VehicleService,
+    private readonly cameraService: CameraService,
   ) {}
 
   async createPauta(createPautaDto: CreatePautaDto, userId: string) {
+    await this.userService.getUserById(userId);
+    await this.vehicleService.getVehicleById(createPautaDto.vehicleId);
+    await this.cameraService.getCameraById(createPautaDto.cameraId);
+
     return await this.pautaRepository.save({
       ...createPautaDto,
       userId,
@@ -37,7 +47,14 @@ export class PautaService {
     return pauta;
   }
 
-  async updatePutPauta(id: string, updatePautaDto: UpdatePautaDto) {
+  async updatePutPauta(
+    id: string,
+    updatePautaDto: UpdatePautaDto,
+    userId: string,
+  ) {
+    await this.userService.getUserById(userId);
+    await this.vehicleService.getVehicleById(updatePautaDto.vehicleId);
+    await this.cameraService.getCameraById(updatePautaDto.cameraId);
     updatePautaDto.updateAt = new Date();
     const userUpdate = await this.pautaRepository.update(id, updatePautaDto);
 
