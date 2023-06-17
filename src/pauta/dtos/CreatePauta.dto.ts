@@ -1,9 +1,11 @@
-import { IsString, MinLength } from 'class-validator';
+import { IsOptional, IsString, MinLength } from 'class-validator';
 
 export class CreatePautaDto {
+  @IsOptional()
   @IsString({ message: 'Id da camera deve ser uma string!' })
   cameraId: string;
 
+  @IsOptional()
   @IsString({ message: 'Id do veículo deve ser uma string!' })
   vehicleId: string;
 

@@ -1,11 +1,10 @@
+import { IsOptional } from 'class-validator';
 import { PautaEntity } from 'src/pauta/entities/pauta.entity';
 import {
   Column,
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
-  UpdateDateColumn,
-  Unique,
   OneToMany,
 } from 'typeorm';
 
@@ -20,7 +19,7 @@ export class UserEntity {
   @Column({ name: 'email', nullable: false, unique: true })
   email: string;
 
-  @Column({ name: 'phone' })
+  @Column({ name: 'phone', nullable: true })
   phone: string;
 
   @Column({ name: 'cpf', nullable: false })
@@ -38,6 +37,6 @@ export class UserEntity {
   @CreateDateColumn({ name: 'updated_at' })
   updateAt: Date;
 
-  @OneToMany(() => PautaEntity, (pauta) => pauta.user)
+  @OneToMany(() => PautaEntity, (pauta) => pauta.user, { onDelete: 'CASCADE' })
   pauta?: PautaEntity[];
 }

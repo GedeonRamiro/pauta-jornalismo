@@ -47,9 +47,10 @@ export class PautaController {
   async updatePutUser(
     @Param('id') id: string,
     @Body() updatePutUser: UpdatePautaDto,
+    @UserId('userId') userId: string,
   ): Promise<ReturnPautaDto> {
     return new ReturnPautaDto(
-      await this.pautaService.updatePutPauta(id, updatePutUser),
+      await this.pautaService.updatePutPauta(id, updatePutUser, userId),
     );
   }
 
