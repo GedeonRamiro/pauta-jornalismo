@@ -22,7 +22,7 @@ export class CreateTablePauta1686242377413 implements MigrationInterface {
           {
             name: 'user_id',
             type: 'varchar',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'camera_id',

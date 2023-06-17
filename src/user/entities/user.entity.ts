@@ -37,6 +37,6 @@ export class UserEntity {
   @CreateDateColumn({ name: 'updated_at' })
   updateAt: Date;
 
-  @OneToMany(() => PautaEntity, (pauta) => pauta.user, { onDelete: 'CASCADE' })
+  @OneToMany(() => PautaEntity, (pauta) => pauta.user)
   pauta?: PautaEntity[];
 }
