@@ -27,12 +27,12 @@ export class CreateTablePauta1686242377413 implements MigrationInterface {
           {
             name: 'camera_id',
             type: 'varchar',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'vehicle_id',
             type: 'varchar',
-            isNullable: false,
+            isNullable: true,
           },
           {
             name: 'name',
@@ -65,6 +65,7 @@ export class CreateTablePauta1686242377413 implements MigrationInterface {
         columnNames: ['user_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'user',
+        onDelete: 'SET NULL',
       }),
     );
 
@@ -74,6 +75,7 @@ export class CreateTablePauta1686242377413 implements MigrationInterface {
         columnNames: ['camera_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'camera',
+        onDelete: 'SET NULL',
       }),
     );
 
@@ -83,6 +85,7 @@ export class CreateTablePauta1686242377413 implements MigrationInterface {
         columnNames: ['vehicle_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'vehicle',
+        onDelete: 'SET NULL',
       }),
     );
   }
