@@ -14,7 +14,10 @@ import { CreateCameraDto } from './dtos/createCamera.dto';
 import { CameraEntity } from './entities/camera.entity';
 import { ReturnCameraDto } from './dtos/ReturnCamera.dto';
 import { UpdateCameraDto } from './dtos/UpdateCamera.dto';
+import { UserType } from 'src/user/enums/role.enum';
+import { Roles } from 'src/decorator/roles.decorator';
 
+@Roles(UserType.Admin)
 @Controller('camera')
 export class CameraController {
   constructor(private readonly cameraService: CameraService) {}

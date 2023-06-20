@@ -9,13 +9,16 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { Roles } from 'src/decorator/roles.decorator';
 import { UserId } from 'src/decorator/user-id.decorator';
+import { UserType } from 'src/user/enums/role.enum';
 import { CreatePautaDto } from './dtos/CreatePauta.dto';
 import { ReturnPautaDto } from './dtos/ReturnPauta.dto';
 import { UpdatePautaDto } from './dtos/UpdatePauta.dto';
 import { PautaEntity } from './entities/pauta.entity';
 import { PautaService } from './pauta.service';
 
+@Roles(UserType.User, UserType.Admin)
 @Controller('pauta')
 export class PautaController {
   constructor(private readonly pautaService: PautaService) {}
@@ -42,6 +45,7 @@ export class PautaController {
     return new ReturnPautaDto(await this.pautaService.getPautaById(id));
   }
 
+  @Roles(UserType.Admin)
   @UsePipes(ValidationPipe)
   @Put(':id')
   async updatePutUser(

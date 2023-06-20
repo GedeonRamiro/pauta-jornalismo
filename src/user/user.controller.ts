@@ -27,7 +27,7 @@ export class UserController {
     return await this.userService.createUser(createUser);
   }
 
-  @Roles(UserType.User)
+  @Roles(UserType.Admin)
   @Get()
   async getAllUser(): Promise<ReturnUserDto[]> {
     const users = (await this.userService.getAlUser()).map(
@@ -37,12 +37,13 @@ export class UserController {
     return users;
   }
 
-  @Roles(UserType.User)
+  @Roles(UserType.Admin)
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<ReturnUserDto> {
     return new ReturnUserDto(await this.userService.getUserById(id));
   }
 
+  @Roles(UserType.Admin)
   @UsePipes(ValidationPipe)
   @Put(':id')
   async updatePutUser(
@@ -54,6 +55,7 @@ export class UserController {
     );
   }
 
+  @Roles(UserType.Admin)
   @Delete(':id')
   async deleteUser(@Param('id') id: string) {
     return await this.userService.deleteUser(id);

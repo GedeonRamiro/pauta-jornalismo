@@ -9,6 +9,8 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { Roles } from 'src/decorator/roles.decorator';
+import { UserType } from 'src/user/enums/role.enum';
 import { CreateVehicleDto } from './dtos/CreateVehicle.dto';
 import { ReturnVehicleDto } from './dtos/ReturnVehicle.dto';
 import { UpDateVehicleDto } from './dtos/UpdateVehicle.dto';
@@ -19,6 +21,7 @@ import { VehicleService } from './vehicle.service';
 export class VehicleController {
   constructor(private readonly vehicleService: VehicleService) {}
 
+  @Roles(UserType.Admin)
   @Post()
   @UsePipes(ValidationPipe)
   async createVehicle(
