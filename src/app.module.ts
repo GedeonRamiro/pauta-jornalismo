@@ -10,6 +10,7 @@ import { PautaModule } from './pauta/pauta.module';
 import { RolesGuard } from './guards/roles.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
+import { OfficeModule } from './office/office.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { JwtModule } from '@nestjs/jwt';
     AuthModule,
     PautaModule,
     JwtModule,
+    OfficeModule,
   ],
 
   providers: [

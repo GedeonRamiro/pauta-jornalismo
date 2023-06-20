@@ -1,4 +1,5 @@
 import { IsOptional } from 'class-validator';
+import { OfficeEntity } from 'src/office/entities/office.entity';
 import { PautaEntity } from 'src/pauta/entities/pauta.entity';
 import {
   Column,
@@ -6,6 +7,8 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   OneToMany,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity({ name: 'user' })
@@ -25,6 +28,9 @@ export class UserEntity {
   @Column({ name: 'cpf', nullable: false })
   cpf: string;
 
+  @Column({ name: 'office_id', nullable: true })
+  office_id: string;
+
   @Column({ name: 'type_user' })
   typeUser: number;
 
@@ -36,6 +42,10 @@ export class UserEntity {
 
   @CreateDateColumn({ name: 'updated_at' })
   updateAt: Date;
+
+  @ManyToOne(() => OfficeEntity, (office) => office.user)
+  @JoinColumn({ name: 'office_id', referencedColumnName: 'id' })
+  office?: OfficeEntity;
 
   @OneToMany(() => PautaEntity, (pauta) => pauta.user)
   pauta?: PautaEntity[];

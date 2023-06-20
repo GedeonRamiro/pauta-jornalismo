@@ -10,12 +10,15 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 import { UserType } from 'src/user/enums/role.enum';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
+import { OfficeEntity } from 'src/office/entities/office.entity';
+import { OfficeService } from 'src/office/office.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    private readonly officeService: OfficeService,
   ) {}
 
   async createUser(createUserDto: CreateUserDto) {
@@ -24,6 +27,7 @@ export class UserService {
     /* const passwordHashed = await hash(createUserDto.password, saltOrRounds); */
 
     await this.existEmail(createUserDto.email);
+    await this.officeService.getOfficeById(createUserDto.office_id);
 
     return await this.userRepository.save({
       ...createUserDto,
@@ -41,6 +45,7 @@ export class UserService {
       where: { id },
       relations: {
         pauta: true,
+        office: true,
       },
     });
     if (!user) throw new NotFoundException(`Usuário com id: ${id} não existe!`);
@@ -64,6 +69,7 @@ export class UserService {
 
   async updatePutUser(id: string, updateUserDto: UpdateUserDto) {
     updateUserDto.updateAt = new Date();
+    await this.officeService.getOfficeById(updateUserDto.office_id);
     const userUpdate = await this.userRepository.update(id, updateUserDto);
 
     if (!userUpdate) {

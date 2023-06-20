@@ -16,4 +16,8 @@ export class CreateUserDto {
 
   @MinLength(6, { message: 'Senha deve ser no mínimo 6 caracteres!' })
   password: string;
+
+  @IsOptional()
+  @IsString({ message: 'Id do cargo deve ser uma string!' })
+  office_id: string;
 }
