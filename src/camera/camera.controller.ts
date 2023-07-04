@@ -55,7 +55,7 @@ export class CameraController {
   }
 
   @Delete(':id')
-  async deleteCamera(@Param('id') id: string) {
+  async deleteCamera(@Param('id') id: string): Promise<{ message: string }> {
     return await this.cameraService.deleteCamera(id);
   }
 }

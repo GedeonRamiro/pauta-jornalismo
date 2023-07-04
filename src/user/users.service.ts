@@ -21,7 +21,7 @@ export class UserService {
     private readonly officeService: OfficeService,
   ) {}
 
-  async createUser(createUserDto: CreateUserDto) {
+  async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     //const saltOrRounds = 10;
 
     /* const passwordHashed = await hash(createUserDto.password, saltOrRounds); */
@@ -67,7 +67,10 @@ export class UserService {
     return user;
   }
 
-  async updatePutUser(id: string, updateUserDto: UpdateUserDto) {
+  async updatePutUser(
+    id: string,
+    updateUserDto: UpdateUserDto,
+  ): Promise<UserEntity> {
     updateUserDto.updateAt = new Date();
     await this.officeService.getOfficeById(updateUserDto.office_id);
     const userUpdate = await this.userRepository.update(id, updateUserDto);
@@ -78,7 +81,7 @@ export class UserService {
     return this.getUserById(id);
   }
 
-  async deleteUser(id: string) {
+  async deleteUser(id: string): Promise<{ message: string }> {
     const user = await this.getUserById(id);
     await this.userRepository.delete(id);
     return { message: `${user.name} excluido com sucesso!` };
@@ -98,7 +101,7 @@ export class UserService {
     return true;
   }
 
-  async existEmail(email: string) {
+  async existEmail(email: string): Promise<boolean> {
     const user = await this.userRepository.findOneBy({
       email,
     });

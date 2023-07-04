@@ -16,7 +16,9 @@ export class VehicleService {
     private readonly vehicleRepository: Repository<VehicleEntity>,
   ) {}
 
-  async createVehicle(createVehicleDto: CreateVehicleDto) {
+  async createVehicle(
+    createVehicleDto: CreateVehicleDto,
+  ): Promise<VehicleEntity> {
     await this.existPlateVehicle(createVehicleDto.plate);
     return await this.vehicleRepository.save(createVehicleDto);
   }
@@ -37,7 +39,10 @@ export class VehicleService {
     return vehicle;
   }
 
-  async updatePatchVehicle(id: string, updateVehicleDto: UpDateVehicleDto) {
+  async updatePatchVehicle(
+    id: string,
+    updateVehicleDto: UpDateVehicleDto,
+  ): Promise<VehicleEntity> {
     const vehicle = await this.getVehicleById(id);
 
     if (vehicle.plate !== updateVehicleDto.plate && updateVehicleDto.plate) {
@@ -56,7 +61,7 @@ export class VehicleService {
     return this.getVehicleById(id);
   }
 
-  async deleteVehicle(id: string) {
+  async deleteVehicle(id: string): Promise<{ message: string }> {
     const vehicle = await this.getVehicleById(id);
     await this.vehicleRepository.delete(id);
     return {
@@ -64,7 +69,7 @@ export class VehicleService {
     };
   }
 
-  async existPlateVehicle(plate: string) {
+  async existPlateVehicle(plate: string): Promise<boolean> {
     const vehicle = await this.vehicleRepository.findOneBy({
       plate,
     });

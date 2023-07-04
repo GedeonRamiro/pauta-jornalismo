@@ -16,7 +16,7 @@ export class OfficeService {
     private readonly officeRepository: Repository<OfficeEntity>,
   ) {}
 
-  async createOffice(createOfficeDto: CreateOfficeDto) {
+  async createOffice(createOfficeDto: CreateOfficeDto): Promise<OfficeEntity> {
     await this.existOfficeName(createOfficeDto.name);
     return await this.officeRepository.save(createOfficeDto);
   }
@@ -36,7 +36,10 @@ export class OfficeService {
     return office;
   }
 
-  async updatePatchOffice(id: string, updateOfficeDto: UpdateOfficeDto) {
+  async updatePatchOffice(
+    id: string,
+    updateOfficeDto: UpdateOfficeDto,
+  ): Promise<OfficeEntity> {
     const office = await this.getOfficeById(id);
 
     if (updateOfficeDto.name && office.name !== updateOfficeDto.name) {
@@ -55,13 +58,13 @@ export class OfficeService {
     return this.getOfficeById(id);
   }
 
-  async deleteOffice(id: string) {
+  async deleteOffice(id: string): Promise<{ message: string }> {
     const office = await this.getOfficeById(id);
     await this.officeRepository.delete(id);
     return { message: `Cargo ${office.name} excluido com sucesso!` };
   }
 
-  async existOfficeName(name: string) {
+  async existOfficeName(name: string): Promise<boolean> {
     const office = await this.officeRepository.findOneBy({
       name,
     });

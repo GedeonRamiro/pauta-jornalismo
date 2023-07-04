@@ -55,7 +55,7 @@ export class OfficeController {
   }
 
   @Delete(':id')
-  async deleteOffice(@Param('id') id: string) {
+  async deleteOffice(@Param('id') id: string): Promise<{ message: string }> {
     return await this.officeService.deleteOffice(id);
   }
 }

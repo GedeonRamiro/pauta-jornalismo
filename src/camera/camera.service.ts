@@ -16,7 +16,7 @@ export class CameraService {
     private readonly cameraRepository: Repository<CameraEntity>,
   ) {}
 
-  async createCamera(createCameraDto: CreateCameraDto) {
+  async createCamera(createCameraDto: CreateCameraDto): Promise<CameraEntity> {
     await this.existIdentifierNumberCamera(createCameraDto.identifierNumber);
     return await this.cameraRepository.save(createCameraDto);
   }
@@ -37,7 +37,10 @@ export class CameraService {
     return camera;
   }
 
-  async updatePatchCamera(id: string, updateCameraDto: UpdateCameraDto) {
+  async updatePatchCamera(
+    id: string,
+    updateCameraDto: UpdateCameraDto,
+  ): Promise<CameraEntity> {
     const camera = await this.getCameraById(id);
 
     if (
@@ -59,13 +62,15 @@ export class CameraService {
     return this.getCameraById(id);
   }
 
-  async deleteCamera(id: string) {
+  async deleteCamera(id: string): Promise<{ message: string }> {
     const camera = await this.getCameraById(id);
     await this.cameraRepository.delete(id);
     return { message: `${camera.name} excluido com sucesso!` };
   }
 
-  async existIdentifierNumberCamera(identifierNumber: number) {
+  async existIdentifierNumberCamera(
+    identifierNumber: number,
+  ): Promise<boolean> {
     const camera = await this.cameraRepository.findOneBy({
       identifierNumber,
     });

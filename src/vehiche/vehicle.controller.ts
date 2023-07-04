@@ -54,7 +54,7 @@ export class VehicleController {
   }
 
   @Delete(':id')
-  async deleteVehicle(@Param('id') id: string) {
+  async deleteVehicle(@Param('id') id: string): Promise<{ message: string }> {
     return await this.vehicleService.deleteVehicle(id);
   }
 }
