@@ -1,10 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CameraService } from 'src/camera/camera.service';
+import { ReturnOfficeDto } from 'src/office/dtos/ReturnOffice.dto';
 import { UserService } from 'src/user/users.service';
 import { VehicleService } from 'src/vehiche/vehicle.service';
 import { Repository } from 'typeorm';
 import { CreatePautaDto } from './dtos/CreatePauta.dto';
+import { ReturnTeamDto } from './dtos/ReturnTeam.dto';
 import { UpdatePautaDto } from './dtos/UpdatePauta.dto';
 import { PautaEntity } from './entities/pauta.entity';
 
@@ -18,20 +20,45 @@ export class PautaService {
     private readonly cameraService: CameraService,
   ) {}
 
-  async createPauta(createPautaDto: CreatePautaDto, userId: string) {
+  async createPauta(
+    createPautaDto: CreatePautaDto,
+    userId: string,
+  ): Promise<PautaEntity> {
     await this.userService.getUserById(userId);
     await this.vehicleService.getVehicleById(createPautaDto.vehicleId);
     await this.cameraService.getCameraById(createPautaDto.cameraId);
 
     return await this.pautaRepository.save({
       ...createPautaDto,
+      team: JSON.stringify(createPautaDto.team),
       userId,
     });
   }
 
   async getAllPauta(): Promise<PautaEntity[]> {
-    const pauta = await this.pautaRepository.find();
-    return pauta;
+    return await this.pautaRepository.find();
+  }
+
+  async getAllTeam(team: string): Promise<ReturnTeamDto[] | null> {
+    const teamParseJSON = JSON.parse(team);
+
+    return team
+      ? await Promise.all(
+          teamParseJSON.map(async (team: string) => {
+            let teams;
+            const data = await this.userService.getUserById(team);
+
+            teams = {
+              id: data.id,
+              name: data.name,
+              office: data.office
+                ? new ReturnOfficeDto(data.office)
+                : undefined,
+            };
+            return teams;
+          }),
+        )
+      : null;
   }
 
   async getPautaById(id: string): Promise<PautaEntity> {
@@ -44,27 +71,37 @@ export class PautaService {
       },
     });
     if (!pauta) throw new NotFoundException(`Pauta com id: ${id} não existe!`);
-    return pauta;
+
+    const usersTeam = await this.getAllTeam(pauta.team);
+
+    return { ...pauta, teams: usersTeam };
   }
 
   async updatePutPauta(
     id: string,
     updatePautaDto: UpdatePautaDto,
     userId: string,
-  ) {
+  ): Promise<PautaEntity> {
     await this.userService.getUserById(userId);
     await this.vehicleService.getVehicleById(updatePautaDto.vehicleId);
     await this.cameraService.getCameraById(updatePautaDto.cameraId);
     updatePautaDto.updateAt = new Date();
-    const userUpdate = await this.pautaRepository.update(id, updatePautaDto);
+    const userUpdate = await this.pautaRepository.update(id, {
+      ...updatePautaDto,
+      team: JSON.stringify(updatePautaDto.team),
+    });
 
     if (!userUpdate) {
       throw new NotFoundException('Propriedade passada no body inválida!');
     }
-    return this.getPautaById(id);
+
+    const pauta = this.getPautaById(id);
+
+    const usersTeam = await this.getAllTeam(updatePautaDto.team);
+    return { ...pauta, teams: usersTeam };
   }
 
-  async deletePauta(id: string) {
+  async deletePauta(id: string): Promise<{ message: string }> {
     const pauta = await this.getPautaById(id);
     await this.pautaRepository.delete(id);
     return {

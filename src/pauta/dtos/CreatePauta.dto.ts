@@ -14,4 +14,7 @@ export class CreatePautaDto {
 
   @MinLength(5, { message: 'Informação da pauta imcompleta!' })
   infomation: string;
+
+  @IsOptional()
+  team: any;
 }

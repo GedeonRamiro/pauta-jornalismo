@@ -31,6 +31,12 @@ export class PautaEntity {
   @Column({ name: 'infomation', nullable: false })
   infomation: string;
 
+  @Column({ name: 'team', nullable: false, array: true })
+  team: string;
+
+  //@Column({ name: 'team', nullable: false, array: true })
+  teams: any;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 
