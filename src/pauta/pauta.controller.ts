@@ -63,12 +63,18 @@ export class PautaController {
   @Roles(UserType.UserIntermediary, UserType.Admin)
   @UsePipes(ValidationPipe)
   @Put(':id')
-  async updatePutUser(
+  async updatePutPauta(
     @Param('id') id: string,
-    @Body() updatePutUser: UpdatePautaDto,
+    @Body() updatePutPauta: UpdatePautaDto,
     @UserId('userId') userId: string,
   ): Promise<ReturnPautaDto> {
-    const pauta = await this.pautaService.getPautaById(id);
+    await this.pautaService.getPautaById(id);
+
+    const pauta = await this.pautaService.updatePutPauta(
+      id,
+      updatePutPauta,
+      userId,
+    );
 
     const updatePauta = {
       id: pauta.id,

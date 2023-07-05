@@ -53,6 +53,20 @@ export class UserService {
     return user;
   }
 
+  async getUserDataByToken(Userid: string): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({
+      where: { id: Userid },
+      relations: {
+        pauta: true,
+        office: true,
+      },
+    });
+    if (!user)
+      throw new NotFoundException(`Usuário com id: ${Userid} não existe!`);
+
+    return user;
+  }
+
   async findUserByEmail(email: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({
       where: {

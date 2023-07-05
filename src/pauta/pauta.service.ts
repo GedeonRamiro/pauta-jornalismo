@@ -28,6 +28,8 @@ export class PautaService {
     await this.vehicleService.getVehicleById(createPautaDto.vehicleId);
     await this.cameraService.getCameraById(createPautaDto.cameraId);
 
+    await this.getAllTeam(JSON.stringify(createPautaDto.team));
+
     return await this.pautaRepository.save({
       ...createPautaDto,
       team: JSON.stringify(createPautaDto.team),
@@ -42,7 +44,7 @@ export class PautaService {
   async getAllTeam(team: string): Promise<ReturnTeamDto[] | null> {
     const teamParseJSON = JSON.parse(team);
 
-    return team
+    return teamParseJSON
       ? await Promise.all(
           teamParseJSON.map(async (team: string) => {
             let teams;
@@ -85,7 +87,11 @@ export class PautaService {
     await this.userService.getUserById(userId);
     await this.vehicleService.getVehicleById(updatePautaDto.vehicleId);
     await this.cameraService.getCameraById(updatePautaDto.cameraId);
+
     updatePautaDto.updateAt = new Date();
+
+    await this.getAllTeam(JSON.stringify(updatePautaDto.team));
+
     const userUpdate = await this.pautaRepository.update(id, {
       ...updatePautaDto,
       team: JSON.stringify(updatePautaDto.team),
@@ -95,9 +101,12 @@ export class PautaService {
       throw new NotFoundException('Propriedade passada no body inválida!');
     }
 
-    const pauta = this.getPautaById(id);
+    const pauta = await this.getPautaById(id);
 
-    const usersTeam = await this.getAllTeam(updatePautaDto.team);
+    const usersTeam = await this.getAllTeam(
+      JSON.stringify(updatePautaDto.team),
+    );
+
     return { ...pauta, teams: usersTeam };
   }
 

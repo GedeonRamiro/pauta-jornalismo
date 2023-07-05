@@ -16,6 +16,7 @@ import { ReturnUserDto } from './dtos/ReturnUser.dto';
 import { Roles } from 'src/decorator/roles.decorator';
 import { UserType } from './enums/role.enum';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
+import { UserId } from 'src/decorator/user-id.decorator';
 
 @Controller('user')
 export class UserController {
@@ -41,6 +42,14 @@ export class UserController {
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<ReturnUserDto> {
     return new ReturnUserDto(await this.userService.getUserById(id));
+  }
+
+  @Roles(UserType.User, UserType.UserIntermediary, UserType.Admin)
+  @Get('/pauta')
+  async getUserDataByToken(
+    @UserId('userId') userId: string,
+  ): Promise<ReturnUserDto> {
+    return new ReturnUserDto(await this.userService.getUserDataByToken(userId));
   }
 
   @Roles(UserType.Admin)
