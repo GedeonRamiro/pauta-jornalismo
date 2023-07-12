@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CameraModule } from 'src/camera/camera.module';
 import { UsersModule } from 'src/user/users.module';
@@ -10,11 +10,12 @@ import { PautaService } from './pauta.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([PautaEntity]),
-    UsersModule,
+    forwardRef(() => UsersModule),
     CameraModule,
     VehicleModule,
   ],
   controllers: [PautaController],
   providers: [PautaService],
+  exports: [PautaService],
 })
 export class PautaModule {}

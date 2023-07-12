@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -22,11 +22,11 @@ import { OfficeModule } from './office/office.module';
       database: process.env.DB_DATABASE,
       entities: [`${__dirname}/**/*.entity{.js,.ts}`],
     }),
-    UsersModule,
+    forwardRef(() => UsersModule),
     CameraModule,
     VehicleModule,
     AuthModule,
-    PautaModule,
+    forwardRef(() => PautaModule),
     JwtModule,
     OfficeModule,
   ],
