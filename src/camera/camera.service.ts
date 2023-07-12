@@ -22,7 +22,11 @@ export class CameraService {
   }
 
   async getAllCamera(): Promise<CameraEntity[]> {
-    return await this.cameraRepository.find();
+    return await this.cameraRepository.find({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 
   async getCameraById(id: string): Promise<CameraEntity> {

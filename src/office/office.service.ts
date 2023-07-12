@@ -22,7 +22,11 @@ export class OfficeService {
   }
 
   async getAllOffice(): Promise<OfficeEntity[]> {
-    return await this.officeRepository.find();
+    return await this.officeRepository.find({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 
   async getOfficeById(id: string): Promise<OfficeEntity> {

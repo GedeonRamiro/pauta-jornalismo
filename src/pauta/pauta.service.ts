@@ -38,7 +38,11 @@ export class PautaService {
   }
 
   async getAllPauta(): Promise<PautaEntity[]> {
-    return await this.pautaRepository.find();
+    return await this.pautaRepository.find({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 
   async getAllTeam(team: string): Promise<ReturnTeamDto[] | null> {
@@ -64,6 +68,7 @@ export class PautaService {
   }
 
   async getPautaById(id: string): Promise<PautaEntity> {
+    console.log({ id });
     const pauta = await this.pautaRepository.findOne({
       where: { id },
       relations: {
@@ -73,6 +78,7 @@ export class PautaService {
       },
     });
     if (!pauta) throw new NotFoundException(`Pauta com id: ${id} não existe!`);
+    console.log({ pauta });
 
     const usersTeam = await this.getAllTeam(pauta.team);
 
@@ -90,21 +96,25 @@ export class PautaService {
 
     updatePautaDto.updateAt = new Date();
 
-    await this.getAllTeam(JSON.stringify(updatePautaDto.team));
+    if (updatePautaDto.team) {
+      await this.getAllTeam(JSON.stringify(updatePautaDto.team));
+    }
+
+    const pauta = await this.getPautaById(id);
 
     const userUpdate = await this.pautaRepository.update(id, {
       ...updatePautaDto,
-      team: JSON.stringify(updatePautaDto.team),
+      team: updatePautaDto.team
+        ? JSON.stringify(updatePautaDto.team)
+        : pauta.team,
     });
 
     if (!userUpdate) {
       throw new NotFoundException('Propriedade passada no body inválida!');
     }
 
-    const pauta = await this.getPautaById(id);
-
     const usersTeam = await this.getAllTeam(
-      JSON.stringify(updatePautaDto.team),
+      updatePautaDto.team ? JSON.stringify(updatePautaDto.team) : pauta.team,
     );
 
     return { ...pauta, teams: usersTeam };

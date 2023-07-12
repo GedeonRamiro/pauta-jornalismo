@@ -24,7 +24,11 @@ export class VehicleService {
   }
 
   async getAllVehicle(): Promise<VehicleEntity[]> {
-    return await this.vehicleRepository.find();
+    return await this.vehicleRepository.find({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 
   async getVehicleById(id: string): Promise<VehicleEntity> {
