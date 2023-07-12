@@ -53,8 +53,8 @@ export class PautaController {
       name: pauta.name,
       infomation: pauta.infomation,
       user: new ReturnUserDto(pauta.user),
-      camera: new ReturnCameraDto(pauta.camera),
-      vehicle: new ReturnVehicleDto(pauta.vehicle),
+      camera: pauta.camera ? new ReturnCameraDto(pauta.camera) : null,
+      vehicle: pauta.vehicle ? new ReturnVehicleDto(pauta.vehicle) : null,
       teams: pauta.teams ? pauta.teams : null,
     };
     return newPauta;
@@ -81,8 +81,8 @@ export class PautaController {
       name: pauta.name,
       infomation: pauta.infomation,
       user: new ReturnUserDto(pauta.user),
-      camera: new ReturnCameraDto(pauta.camera),
-      vehicle: new ReturnVehicleDto(pauta.vehicle),
+      camera: pauta.camera ? new ReturnCameraDto(pauta.camera) : null,
+      vehicle: pauta.vehicle ? new ReturnVehicleDto(pauta.vehicle) : null,
       teams: pauta.teams ? pauta.teams : null,
     };
     return updatePauta;
