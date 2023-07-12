@@ -1,5 +1,7 @@
 import {
   BadGatewayException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -10,8 +12,8 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 import { UserType } from 'src/user/enums/role.enum';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
-import { OfficeEntity } from 'src/office/entities/office.entity';
 import { OfficeService } from 'src/office/office.service';
+import { PautaService } from 'src/pauta/pauta.service';
 
 @Injectable()
 export class UserService {
@@ -19,6 +21,8 @@ export class UserService {
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
     private readonly officeService: OfficeService,
+    @Inject(forwardRef(() => PautaService))
+    private readonly pautaService: PautaService,
   ) {}
 
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
@@ -37,7 +41,11 @@ export class UserService {
   }
 
   async getAlUser(): Promise<UserEntity[]> {
-    return await this.userRepository.find();
+    return await this.userRepository.find({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 
   async getUserById(id: string): Promise<UserEntity> {
@@ -48,12 +56,13 @@ export class UserService {
         office: true,
       },
     });
+
     if (!user) throw new NotFoundException(`Usuário com id: ${id} não existe!`);
 
     return user;
   }
 
-  async getUserDataByToken(Userid: string): Promise<UserEntity> {
+  async getUserPauta(Userid: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({
       where: { id: Userid },
       relations: {
@@ -61,10 +70,21 @@ export class UserService {
         office: true,
       },
     });
+
     if (!user)
       throw new NotFoundException(`Usuário com id: ${Userid} não existe!`);
 
-    return user;
+    const pauta = await (await this.pautaService.getAllPauta())
+      .map((team) =>
+        JSON.parse(team.team).includes(user.id) ? team : undefined,
+      )
+      .filter((team) => team ?? team);
+
+    const sortByDate = [...user.pauta, ...pauta].sort((a, b) => {
+      return a.createdAt.getTime() + b.createdAt.getTime();
+    });
+
+    return { ...user, pauta: sortByDate };
   }
 
   async findUserByEmail(email: string): Promise<UserEntity> {
