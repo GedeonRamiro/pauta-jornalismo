@@ -18,6 +18,7 @@ import { UserType } from './enums/role.enum';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
 import { UserId } from 'src/decorator/user-id.decorator';
 
+//@Roles(UserType.User, UserType.UserIntermediary, UserType.Admin)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -28,7 +29,7 @@ export class UserController {
     return await this.userService.createUser(createUser);
   }
 
-  @Roles(UserType.Admin)
+  @Roles(UserType.Admin, UserType.UserIntermediary)
   @Get()
   async getAllUser(): Promise<ReturnUserDto[]> {
     const users = (await this.userService.getAlUser()).map(
@@ -38,6 +39,7 @@ export class UserController {
     return users;
   }
 
+  @Roles(UserType.Admin, UserType.UserIntermediary)
   @Roles(UserType.Admin)
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<ReturnUserDto> {
@@ -45,11 +47,9 @@ export class UserController {
   }
 
   @Roles(UserType.User, UserType.UserIntermediary, UserType.Admin)
-  @Get('/pauta')
-  async getUserDataByToken(
-    @UserId('userId') userId: string,
-  ): Promise<ReturnUserDto> {
-    return new ReturnUserDto(await this.userService.getUserDataByToken(userId));
+  @Get('climb/pauta')
+  async getUserDataByToken(@UserId('userId') userId: string): Promise<any> {
+    return new ReturnUserDto(await this.userService.getUserPauta(userId));
   }
 
   @Roles(UserType.Admin)

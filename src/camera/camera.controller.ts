@@ -30,6 +30,7 @@ export class CameraController {
     return await this.cameraService.createCamera(createCamera);
   }
 
+  @Roles(UserType.Admin, UserType.UserIntermediary)
   @Get()
   async getAllCamera(): Promise<ReturnCameraDto[]> {
     const cameras = (await this.cameraService.getAllCamera()).map(
@@ -38,6 +39,7 @@ export class CameraController {
     return cameras;
   }
 
+  @Roles(UserType.Admin, UserType.UserIntermediary)
   @Get(':id')
   async getCameraById(@Param('id') id: string): Promise<ReturnCameraDto> {
     return new ReturnCameraDto(await this.cameraService.getCameraById(id));

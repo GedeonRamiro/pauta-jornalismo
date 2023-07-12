@@ -17,6 +17,7 @@ import { UpDateVehicleDto } from './dtos/UpdateVehicle.dto';
 import { VehicleEntity } from './entities/vehicle.entity';
 import { VehicleService } from './vehicle.service';
 
+@Roles(UserType.Admin)
 @Controller('vehicle')
 export class VehicleController {
   constructor(private readonly vehicleService: VehicleService) {}
@@ -30,6 +31,7 @@ export class VehicleController {
     return await this.vehicleService.createVehicle(createVehicle);
   }
 
+  @Roles(UserType.Admin, UserType.UserIntermediary)
   @Get()
   async getAllVehicle(): Promise<ReturnVehicleDto[]> {
     const vehicles = (await this.vehicleService.getAllVehicle()).map(
@@ -38,6 +40,7 @@ export class VehicleController {
     return vehicles;
   }
 
+  @Roles(UserType.Admin, UserType.UserIntermediary)
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<ReturnVehicleDto> {
     return new ReturnVehicleDto(await this.vehicleService.getVehicleById(id));
