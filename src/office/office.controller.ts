@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -15,6 +16,7 @@ import { CreateOfficeDto } from './dtos/CreateOffice.dto';
 import { ReturnOfficeDto } from './dtos/ReturnOffice.dto';
 import { UpdateOfficeDto } from './dtos/UpdateOffice.dto';
 import { OfficeEntity } from './entities/office.entity';
+import { ReturnOfficePagination } from './interface/ReturnOfficePagination';
 import { OfficeService } from './office.service';
 
 @Roles(UserType.Admin)
@@ -31,11 +33,20 @@ export class OfficeController {
   }
 
   @Get()
-  async getAllOffice(): Promise<ReturnOfficeDto[]> {
-    const office = (await this.officeService.getAllOffice()).map(
-      (office) => new ReturnOfficeDto(office),
+  async getAllOffice(
+    @Query() { page, limit, filter },
+  ): Promise<ReturnOfficePagination> {
+    const resultOffice = await this.officeService.getAllOffice(
+      parseInt(limit || 10),
+      parseInt(page || 1),
+      filter || '',
     );
-    return office;
+
+    const office = resultOffice.data.map(
+      (office) => new ReturnOfficeDto({ ...office }),
+    );
+
+    return { ...resultOffice, data: office };
   }
 
   @Get(':id')

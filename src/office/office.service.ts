@@ -1,13 +1,15 @@
 import {
   BadGatewayException,
   Injectable,
+  NotAcceptableException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateOfficeDto } from './dtos/CreateOffice.dto';
 import { UpdateOfficeDto } from './dtos/UpdateOffice.dto';
 import { OfficeEntity } from './entities/office.entity';
+import { ReturnOfficePagination } from './interface/ReturnOfficePagination';
 
 @Injectable()
 export class OfficeService {
@@ -21,12 +23,35 @@ export class OfficeService {
     return await this.officeRepository.save(createOfficeDto);
   }
 
-  async getAllOffice(): Promise<OfficeEntity[]> {
-    return await this.officeRepository.find({
+  async getAllOffice(
+    limit: number,
+    page: number,
+    filter: string,
+  ): Promise<ReturnOfficePagination> {
+    if (isNaN(Number(page) && Number(limit))) {
+      throw new NotAcceptableException('Página ou limite formato invalido!');
+    }
+
+    const skip = (page - 1) * limit;
+    const [result, total] = await this.officeRepository.findAndCount({
+      where: { name: Like('%' + filter + '%') },
+      take: limit,
+      skip: skip,
       order: {
         createdAt: 'DESC',
       },
     });
+    const lastPage = Math.ceil(total / limit);
+    const nextPage = page + 1 > lastPage ? null : page + 1;
+    const prevPage = page - 1 < 1 ? null : page - 1;
+    return {
+      data: [...result],
+      count: total,
+      currentPage: page,
+      nextPage: nextPage,
+      prevPage: prevPage,
+      lastPage: lastPage,
+    };
   }
 
   async getOfficeById(id: string): Promise<OfficeEntity> {
