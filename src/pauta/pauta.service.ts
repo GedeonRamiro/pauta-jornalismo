@@ -1,14 +1,20 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotAcceptableException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CameraService } from 'src/camera/camera.service';
 import { ReturnOfficeDto } from 'src/office/dtos/ReturnOffice.dto';
 import { UserService } from 'src/user/users.service';
 import { VehicleService } from 'src/vehiche/vehicle.service';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreatePautaDto } from './dtos/CreatePauta.dto';
 import { ReturnTeamDto } from './dtos/ReturnTeam.dto';
 import { UpdatePautaDto } from './dtos/UpdatePauta.dto';
 import { PautaEntity } from './entities/pauta.entity';
+import { ReturnPautaPagination } from './interface/ReturnPautaPagination';
+import { createPagination } from 'src/utils/pagination';
 
 @Injectable()
 export class PautaService {
@@ -45,6 +51,31 @@ export class PautaService {
     });
   }
 
+  async getAllPautaPagination(
+    limit: number,
+    page: number,
+    filter: string,
+  ): Promise<ReturnPautaPagination> {
+    if (isNaN(Number(page) && Number(limit))) {
+      throw new NotAcceptableException('Página ou limite formato invalido!');
+    }
+
+    const skip = (page - 1) * limit;
+    const [result, total] = await this.pautaRepository.findAndCount({
+      where: { name: Like('%' + filter + '%') },
+      take: limit,
+      skip: skip,
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+    const pagination = createPagination(limit, page, total);
+    return {
+      data: [...result],
+      ...pagination,
+    };
+  }
+
   async getAllTeam(team: string): Promise<ReturnTeamDto[] | null> {
     const teamParseJSON = JSON.parse(team);
 
@@ -68,7 +99,6 @@ export class PautaService {
   }
 
   async getPautaById(id: string): Promise<PautaEntity> {
-    console.log({ id });
     const pauta = await this.pautaRepository.findOne({
       where: { id },
       relations: {
@@ -78,7 +108,6 @@ export class PautaService {
       },
     });
     if (!pauta) throw new NotFoundException(`Pauta com id: ${id} não existe!`);
-    console.log({ pauta });
 
     const usersTeam = await this.getAllTeam(pauta.team);
 

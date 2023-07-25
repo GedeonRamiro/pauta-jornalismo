@@ -1,13 +1,16 @@
 import {
   BadGatewayException,
   Injectable,
+  NotAcceptableException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { VehicleEntity } from './entities/vehicle.entity';
 import { CreateVehicleDto } from './dtos/CreateVehicle.dto';
 import { UpDateVehicleDto } from './dtos/UpdateVehicle.dto';
+import { ReturnVehichePagination } from './interface/ReturnVehichePagination';
+import { createPagination } from 'src/utils/pagination';
 
 @Injectable()
 export class VehicleService {
@@ -23,12 +26,29 @@ export class VehicleService {
     return await this.vehicleRepository.save(createVehicleDto);
   }
 
-  async getAllVehicle(): Promise<VehicleEntity[]> {
-    return await this.vehicleRepository.find({
+  async getAllVehicle(
+    limit: number,
+    page: number,
+    filter: string,
+  ): Promise<ReturnVehichePagination> {
+    if (isNaN(Number(page) && Number(limit))) {
+      throw new NotAcceptableException('Página ou limite formato invalido!');
+    }
+
+    const skip = (page - 1) * limit;
+    const [result, total] = await this.vehicleRepository.findAndCount({
+      where: { model: Like('%' + filter + '%') },
+      take: limit,
+      skip: skip,
       order: {
         createdAt: 'DESC',
       },
     });
+    const pagination = createPagination(limit, page, total);
+    return {
+      data: [...result],
+      ...pagination,
+    };
   }
 
   async getVehicleById(id: string): Promise<VehicleEntity> {

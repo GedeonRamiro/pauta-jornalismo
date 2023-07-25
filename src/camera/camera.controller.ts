@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import { ReturnCameraDto } from './dtos/ReturnCamera.dto';
 import { UpdateCameraDto } from './dtos/UpdateCamera.dto';
 import { UserType } from 'src/user/enums/role.enum';
 import { Roles } from 'src/decorator/roles.decorator';
+import { ReturnCameraPagination } from './interface/ReturnCameraPagination';
 
 @Roles(UserType.Admin)
 @Controller('camera')
@@ -32,11 +34,20 @@ export class CameraController {
 
   @Roles(UserType.Admin, UserType.UserIntermediary)
   @Get()
-  async getAllCamera(): Promise<ReturnCameraDto[]> {
-    const cameras = (await this.cameraService.getAllCamera()).map(
-      (camera) => new ReturnCameraDto(camera),
+  async getAllCamera(
+    @Query() { limit, page, filter },
+  ): Promise<ReturnCameraPagination> {
+    const resultCamera = await this.cameraService.getAllCamera(
+      parseInt(limit || 10),
+      parseInt(page || 1),
+      filter || '',
     );
-    return cameras;
+
+    const camera = resultCamera.data.map(
+      (camera) => new ReturnCameraDto({ ...camera }),
+    );
+
+    return { ...resultCamera, data: camera };
   }
 
   @Roles(UserType.Admin, UserType.UserIntermediary)

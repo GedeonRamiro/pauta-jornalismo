@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -19,6 +20,7 @@ import { CreatePautaDto } from './dtos/CreatePauta.dto';
 import { ReturnPautaDto } from './dtos/ReturnPauta.dto';
 import { UpdatePautaDto } from './dtos/UpdatePauta.dto';
 import { PautaEntity } from './entities/pauta.entity';
+import { ReturnPautaPagination } from './interface/ReturnPautaPagination';
 import { PautaService } from './pauta.service';
 
 @Roles(UserType.User, UserType.UserIntermediary, UserType.Admin)
@@ -37,11 +39,20 @@ export class PautaController {
   }
 
   @Get()
-  async getAllPauta(): Promise<ReturnPautaDto[]> {
-    const pautas = (await this.pautaService.getAllPauta()).map(
-      (pauta) => new ReturnPautaDto(pauta),
+  async getAllPauta(
+    @Query() { limit, page, filter },
+  ): Promise<ReturnPautaPagination> {
+    const resultPauta = await this.pautaService.getAllPautaPagination(
+      parseInt(limit || 10),
+      parseInt(page || 1),
+      filter || '',
     );
-    return pautas;
+
+    const pauta = resultPauta.data.map(
+      (pauta) => new ReturnPautaDto({ ...pauta }),
+    );
+
+    return { ...resultPauta, data: pauta };
   }
 
   @Get(':id')

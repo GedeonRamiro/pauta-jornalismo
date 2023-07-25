@@ -1,13 +1,16 @@
 import {
   BadGatewayException,
   Injectable,
+  NotAcceptableException,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { createPagination } from 'src/utils/pagination';
+import { Like, Repository } from 'typeorm';
 import { CreateCameraDto } from './dtos/createCamera.dto';
 import { UpdateCameraDto } from './dtos/UpdateCamera.dto';
 import { CameraEntity } from './entities/camera.entity';
+import { ReturnCameraPagination } from './interface/ReturnCameraPagination';
 
 @Injectable()
 export class CameraService {
@@ -21,12 +24,29 @@ export class CameraService {
     return await this.cameraRepository.save(createCameraDto);
   }
 
-  async getAllCamera(): Promise<CameraEntity[]> {
-    return await this.cameraRepository.find({
+  async getAllCamera(
+    limit: number,
+    page: number,
+    filter: string,
+  ): Promise<ReturnCameraPagination> {
+    if (isNaN(Number(page) && Number(limit))) {
+      throw new NotAcceptableException('Página ou limite formato invalido!');
+    }
+
+    const skip = (page - 1) * limit;
+    const [result, total] = await this.cameraRepository.findAndCount({
+      where: { name: Like('%' + filter + '%') },
+      take: limit,
+      skip: skip,
       order: {
         createdAt: 'DESC',
       },
     });
+    const pagination = createPagination(limit, page, total);
+    return {
+      data: [...result],
+      ...pagination,
+    };
   }
 
   async getCameraById(id: string): Promise<CameraEntity> {

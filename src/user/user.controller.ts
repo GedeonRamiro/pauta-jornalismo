@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -17,6 +18,7 @@ import { Roles } from 'src/decorator/roles.decorator';
 import { UserType } from './enums/role.enum';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
 import { UserId } from 'src/decorator/user-id.decorator';
+import { ReturnUserPagination } from './interface/ReturnUserPagination';
 
 //@Roles(UserType.User, UserType.UserIntermediary, UserType.Admin)
 @Controller('user')
@@ -31,12 +33,18 @@ export class UserController {
 
   @Roles(UserType.Admin, UserType.UserIntermediary)
   @Get()
-  async getAllUser(): Promise<ReturnUserDto[]> {
-    const users = (await this.userService.getAlUser()).map(
-      (user) => new ReturnUserDto(user),
+  async getAllUser(
+    @Query() { limit, page, filter },
+  ): Promise<ReturnUserPagination> {
+    const resultUser = await this.userService.getAllUser(
+      parseInt(limit || 10),
+      parseInt(page || 1),
+      filter || '',
     );
 
-    return users;
+    const user = resultUser.data.map((user) => new ReturnUserDto({ ...user }));
+
+    return { ...resultUser, data: user };
   }
 
   @Roles(UserType.Admin, UserType.UserIntermediary)

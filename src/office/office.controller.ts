@@ -34,7 +34,7 @@ export class OfficeController {
 
   @Get()
   async getAllOffice(
-    @Query() { page, limit, filter },
+    @Query() { limit, page, filter },
   ): Promise<ReturnOfficePagination> {
     const resultOffice = await this.officeService.getAllOffice(
       parseInt(limit || 10),

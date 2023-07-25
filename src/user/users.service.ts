@@ -3,17 +3,20 @@ import {
   forwardRef,
   Inject,
   Injectable,
+  NotAcceptableException,
   NotFoundException,
 } from '@nestjs/common';
 import { UserEntity } from './entities/user.entity';
 /* import { hash } from 'bcrypt'; */
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 import { UserType } from 'src/user/enums/role.enum';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
 import { OfficeService } from 'src/office/office.service';
 import { PautaService } from 'src/pauta/pauta.service';
+import { createPagination } from 'src/utils/pagination';
+import { ReturnUserPagination } from './interface/ReturnUserPagination';
 
 @Injectable()
 export class UserService {
@@ -40,12 +43,29 @@ export class UserService {
     });
   }
 
-  async getAlUser(): Promise<UserEntity[]> {
-    return await this.userRepository.find({
+  async getAllUser(
+    limit: number,
+    page: number,
+    filter: string,
+  ): Promise<ReturnUserPagination> {
+    if (isNaN(Number(page) && Number(limit))) {
+      throw new NotAcceptableException('Página ou limite formato invalido!');
+    }
+
+    const skip = (page - 1) * limit;
+    const [result, total] = await this.userRepository.findAndCount({
+      where: { name: Like('%' + filter + '%') },
+      take: limit,
+      skip: skip,
       order: {
         createdAt: 'DESC',
       },
     });
+    const pagination = createPagination(limit, page, total);
+    return {
+      data: [...result],
+      ...pagination,
+    };
   }
 
   async getUserById(id: string): Promise<UserEntity> {

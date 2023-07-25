@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -15,6 +16,7 @@ import { CreateVehicleDto } from './dtos/CreateVehicle.dto';
 import { ReturnVehicleDto } from './dtos/ReturnVehicle.dto';
 import { UpDateVehicleDto } from './dtos/UpdateVehicle.dto';
 import { VehicleEntity } from './entities/vehicle.entity';
+import { ReturnVehichePagination } from './interface/ReturnVehichePagination';
 import { VehicleService } from './vehicle.service';
 
 @Roles(UserType.Admin)
@@ -33,11 +35,20 @@ export class VehicleController {
 
   @Roles(UserType.Admin, UserType.UserIntermediary)
   @Get()
-  async getAllVehicle(): Promise<ReturnVehicleDto[]> {
-    const vehicles = (await this.vehicleService.getAllVehicle()).map(
-      (vehicle) => new ReturnVehicleDto(vehicle),
+  async getAllVehicle(
+    @Query() { limit, page, filter },
+  ): Promise<ReturnVehichePagination> {
+    const resultVehice = await this.vehicleService.getAllVehicle(
+      parseInt(limit || 10),
+      parseInt(page || 1),
+      filter || '',
     );
-    return vehicles;
+
+    const vehicle = resultVehice.data.map(
+      (vehicle) => new ReturnVehicleDto({ ...vehicle }),
+    );
+
+    return { ...resultVehice, data: vehicle };
   }
 
   @Roles(UserType.Admin, UserType.UserIntermediary)
