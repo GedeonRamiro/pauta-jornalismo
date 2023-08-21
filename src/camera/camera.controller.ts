@@ -18,6 +18,7 @@ import { UpdateCameraDto } from './dtos/UpdateCamera.dto';
 import { UserType } from 'src/user/enums/role.enum';
 import { Roles } from 'src/decorator/roles.decorator';
 import { ReturnCameraPagination } from './interface/ReturnCameraPagination';
+import { Environment } from 'src/enums/role.environment';
 
 @Roles(UserType.Admin)
 @Controller('camera')
@@ -38,8 +39,8 @@ export class CameraController {
     @Query() { limit, page, filter },
   ): Promise<ReturnCameraPagination> {
     const resultCamera = await this.cameraService.getAllCamera(
-      parseInt(limit || 10),
-      parseInt(page || 1),
+      parseInt(limit || Environment.LINE_LIMIT),
+      parseInt(page || Environment.CURRENT_PAGE),
       filter || '',
     );
 

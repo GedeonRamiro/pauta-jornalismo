@@ -19,6 +19,9 @@ import { UserType } from './enums/role.enum';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
 import { UserId } from 'src/decorator/user-id.decorator';
 import { ReturnUserPagination } from './interface/ReturnUserPagination';
+import { ReturnPautaDto } from 'src/pauta/dtos/ReturnPauta.dto';
+import { ReturnUserPaginationById } from './interface/ReturnUserPaginationById';
+import { Environment } from 'src/enums/role.environment';
 
 //@Roles(UserType.User, UserType.UserIntermediary, UserType.Admin)
 @Controller('user')
@@ -37,8 +40,8 @@ export class UserController {
     @Query() { limit, page, filter },
   ): Promise<ReturnUserPagination> {
     const resultUser = await this.userService.getAllUser(
-      parseInt(limit || 10),
-      parseInt(page || 1),
+      parseInt(limit || Environment.LINE_LIMIT),
+      parseInt(page || Environment.CURRENT_PAGE),
       filter || '',
     );
 
@@ -52,6 +55,48 @@ export class UserController {
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<ReturnUserDto> {
     return new ReturnUserDto(await this.userService.getUserById(id));
+  }
+
+  @Roles(UserType.Admin, UserType.UserIntermediary)
+  @Roles(UserType.Admin)
+  @Get('pagination/:id')
+  async getUserByIdPagination(
+    @Param('id') id: string,
+    @Body() { page },
+  ): Promise<ReturnUserPaginationById> {
+    let resultUser = await this.userService.getUserByIdPagination(
+      id,
+      parseInt(page || Environment.CURRENT_PAGE),
+    );
+
+    const pauta = resultUser.data.pauta.map(
+      (pauta) => new ReturnPautaDto(pauta),
+    );
+
+    let newUser = {
+      ...resultUser,
+      data: {
+        id: resultUser.data.id,
+        name: resultUser.data.name,
+        email: resultUser.data.email,
+        phone: resultUser.data.phone,
+        cpf: resultUser.data.cpf,
+        office: resultUser.data.office,
+        pauta: pauta,
+      },
+    } as ReturnUserPaginationById;
+
+    return newUser;
+
+    /*  data: {
+      id: resultUser.data.id,
+      name: resultUser.data.name,
+      email: resultUser.data.email,
+      phone: resultUser.data.phone,
+      cpf: resultUser.data.cpf,
+      office: resultUser.data.office,
+      pauta: pauta,
+    }, */
   }
 
   @Roles(UserType.User, UserType.UserIntermediary, UserType.Admin)

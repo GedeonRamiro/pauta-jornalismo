@@ -17,6 +17,8 @@ import { OfficeService } from 'src/office/office.service';
 import { PautaService } from 'src/pauta/pauta.service';
 import { createPagination } from 'src/utils/pagination';
 import { ReturnUserPagination } from './interface/ReturnUserPagination';
+import { ReturnUserPaginationById } from './interface/ReturnUserPaginationById';
+import { Environment } from 'src/enums/role.environment';
 
 @Injectable()
 export class UserService {
@@ -53,6 +55,7 @@ export class UserService {
     }
 
     const skip = (page - 1) * limit;
+
     const [result, total] = await this.userRepository.findAndCount({
       where: { name: Like('%' + filter + '%') },
       take: limit,
@@ -71,15 +74,46 @@ export class UserService {
   async getUserById(id: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({
       where: { id },
-      relations: {
-        pauta: true,
-        office: true,
-      },
     });
+    if (!user) throw new NotFoundException(`User com id: ${id} não existe!`);
+    return user;
+  }
 
+  async getUserByIdPagination(
+    id: string,
+    page: number,
+  ): Promise<ReturnUserPaginationById> {
+    if (isNaN(Number(page))) {
+      throw new NotAcceptableException('Página ou limite formato invalido!');
+    }
+
+    const offset = (page - 1) * Environment.LINE_LIMIT;
+
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .where({ id })
+      .leftJoinAndSelect('user.pauta', 'pauta')
+      .orderBy({
+        ' pauta.createdAt': 'DESC',
+      })
+      .limit(Environment.LINE_LIMIT)
+      .offset(offset)
+      .loadRelationCountAndMap('user.count', 'user.pauta')
+      .getOne();
+
+    console.log(user);
     if (!user) throw new NotFoundException(`Usuário com id: ${id} não existe!`);
 
-    return user;
+    const pagination = createPagination(
+      Environment.LINE_LIMIT,
+      page,
+      user.count,
+    );
+
+    return {
+      data: user,
+      ...pagination,
+    };
   }
 
   async getUserPauta(Userid: string): Promise<UserEntity> {
@@ -94,17 +128,13 @@ export class UserService {
     if (!user)
       throw new NotFoundException(`Usuário com id: ${Userid} não existe!`);
 
-    const pauta = await (await this.pautaService.getAllPauta())
+    const pauta = (await this.pautaService.getAllPauta())
       .map((team) =>
         JSON.parse(team.team).includes(user.id) ? team : undefined,
       )
       .filter((team) => team ?? team);
 
-    const sortByDate = [...user.pauta, ...pauta].sort((a, b) => {
-      return a.createdAt.getTime() + b.createdAt.getTime();
-    });
-
-    return { ...user, pauta: sortByDate };
+    return { ...user, pauta: pauta };
   }
 
   async findUserByEmail(email: string): Promise<UserEntity> {

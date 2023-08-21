@@ -43,6 +43,8 @@ export class UserEntity {
   @CreateDateColumn({ name: 'updated_at' })
   updateAt: Date;
 
+  count?: number;
+
   @ManyToOne(() => OfficeEntity, (office) => office.user)
   @JoinColumn({ name: 'office_id', referencedColumnName: 'id' })
   office?: OfficeEntity;
