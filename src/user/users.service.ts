@@ -19,6 +19,7 @@ import { createPagination } from 'src/utils/pagination';
 import { ReturnUserPagination } from './interface/ReturnUserPagination';
 import { ReturnUserPaginationById } from './interface/ReturnUserPaginationById';
 import { Environment } from 'src/enums/role.environment';
+import { ReturnUserPautaPagination } from './interface/ReturnUserPautaPagination';
 
 @Injectable()
 export class UserService {
@@ -79,7 +80,7 @@ export class UserService {
     return user;
   }
 
-  async getUserByIdPagination(
+  async getUserPautaCreateById(
     id: string,
     page: number,
   ): Promise<ReturnUserPaginationById> {
@@ -101,8 +102,7 @@ export class UserService {
       .loadRelationCountAndMap('user.count', 'user.pauta')
       .getOne();
 
-    console.log(user);
-    if (!user) throw new NotFoundException(`Usuário com id: ${id} não existe!`);
+    if (!user) throw new NotFoundException(`Usuário ou página não existe!`);
 
     const pagination = createPagination(
       Environment.LINE_LIMIT,
@@ -116,17 +116,28 @@ export class UserService {
     };
   }
 
-  async getUserPauta(Userid: string): Promise<UserEntity> {
-    const user = await this.userRepository.findOne({
-      where: { id: Userid },
-      relations: {
-        pauta: true,
-        office: true,
-      },
-    });
+  async getUserPauta(
+    userId: string,
+    page: number,
+  ): Promise<ReturnUserPautaPagination> {
+    if (isNaN(Number(page))) {
+      throw new NotAcceptableException('Página ou limite formato invalido!');
+    }
 
-    if (!user)
-      throw new NotFoundException(`Usuário com id: ${Userid} não existe!`);
+    const offset = (page - 1) * Environment.LINE_LIMIT;
+
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .where({ id: userId })
+      .leftJoinAndSelect('user.pauta', 'pauta')
+      .orderBy({
+        ' pauta.createdAt': 'DESC',
+      })
+      .limit(Environment.LINE_LIMIT)
+      .offset(offset)
+      .getOne();
+
+    if (!user) throw new NotFoundException(`Usuário ou página não existe!`);
 
     const pauta = (await this.pautaService.getAllPauta())
       .map((team) =>
@@ -134,7 +145,13 @@ export class UserService {
       )
       .filter((team) => team ?? team);
 
-    return { ...user, pauta: pauta };
+    const pagination = createPagination(
+      Environment.LINE_LIMIT,
+      page,
+      pauta.length,
+    );
+
+    return { data: { ...user, pauta: pauta }, ...pagination };
   }
 
   async findUserByEmail(email: string): Promise<UserEntity> {
