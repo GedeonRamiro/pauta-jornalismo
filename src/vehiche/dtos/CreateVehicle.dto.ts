@@ -1,4 +1,4 @@
-import { IsString, MinLength } from 'class-validator';
+import { MinLength } from 'class-validator';
 
 export class CreateVehicleDto {
   @MinLength(3, { message: 'Modelo com nome muito curto!' })

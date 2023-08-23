@@ -1,10 +1,4 @@
-import {
-  IsDate,
-  IsNotEmpty,
-  IsNumber,
-  IsOptional,
-  MinLength,
-} from 'class-validator';
+import { IsDate, IsOptional, MinLength } from 'class-validator';
 import { CreateOfficeDto } from './CreateOffice.dto';
 
 export class UpdateOfficeDto extends CreateOfficeDto {

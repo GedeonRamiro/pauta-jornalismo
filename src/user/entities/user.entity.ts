@@ -1,4 +1,3 @@
-import { IsOptional } from 'class-validator';
 import { OfficeEntity } from 'src/office/entities/office.entity';
 import { PautaEntity } from 'src/pauta/entities/pauta.entity';
 import {

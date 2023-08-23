@@ -79,10 +79,10 @@ export class PautaService {
   async getAllTeam(team: string): Promise<ReturnTeamDto[] | null> {
     const teamParseJSON = JSON.parse(team);
 
+    let teams;
     return teamParseJSON
       ? await Promise.all(
           teamParseJSON.map(async (team: string) => {
-            let teams;
             const data = await this.userService.getUserById(team);
 
             teams = {

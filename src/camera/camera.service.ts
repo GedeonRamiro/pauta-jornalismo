@@ -5,8 +5,6 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Environment } from 'src/enums/role.environment';
-import { PautaEntity } from 'src/pauta/entities/pauta.entity';
 import { createPagination } from 'src/utils/pagination';
 import { Like, Repository } from 'typeorm';
 import { CreateCameraDto } from './dtos/createCamera.dto';
@@ -51,22 +49,6 @@ export class CameraService {
       ...pagination,
     };
   }
-
-  /*  async getCameraById(id: string): Promise<any> {
-    const [data, total]: any = await this.cameraRepository
-      .createQueryBuilder('camera')
-      .where({ id })
-      .leftJoinAndSelect('camera.pauta', 'pauta')
-      .limit(2)
-      .loadRelationCountAndMap('camera.count', 'camera.pauta')
-      .getMany();
-
-    //console.log(data.count as number);
-
-    //const pagination = createPagination(Environment.CURRENT_PAGE, Environment.LINE_LIMIT, camera.);
-    console.log(data.count);
-    return data;
-  } */
 
   async getCameraById(id: string): Promise<CameraEntity> {
     const camera = await this.cameraRepository.findOne({

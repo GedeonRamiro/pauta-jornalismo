@@ -74,7 +74,7 @@ export class UserController {
       (pauta) => new ReturnPautaDto(pauta),
     );
 
-    let newUser = {
+    const newUser = {
       ...resultUser,
       data: {
         id: resultUser.data.id,
@@ -105,7 +105,7 @@ export class UserController {
       (pauta) => new ReturnPautaDto(pauta),
     );
 
-    let newUser = {
+    const newUser = {
       ...resultUser,
       data: {
         id: resultUser.data.id,

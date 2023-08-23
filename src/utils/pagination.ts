@@ -1,5 +1,3 @@
-import { Like, Repository } from 'typeorm';
-
 export const createPagination = (
   limit: number,
   page: number,
