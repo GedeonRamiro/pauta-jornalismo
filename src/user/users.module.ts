@@ -1,7 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { OfficeModule } from 'src/office/office.module';
-import { PautaModule } from 'src/pauta/pauta.module';
+import { OfficeModule } from '../office/office.module';
+import { PautaModule } from '../pauta/pauta.module';
 import { UserEntity } from './entities/user.entity';
 
 import { UserController } from './user.controller';

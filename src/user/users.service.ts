@@ -11,14 +11,14 @@ import { UserEntity } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
 import { CreateUserDto } from './dtos/CreateUser.dto';
-import { UserType } from 'src/user/enums/role.enum';
+import { UserType } from '../user/enums/role.enum';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
-import { OfficeService } from 'src/office/office.service';
-import { PautaService } from 'src/pauta/pauta.service';
-import { createPagination } from 'src/utils/pagination';
+import { OfficeService } from '../office/office.service';
+import { PautaService } from '../pauta/pauta.service';
+import { createPagination } from '../utils/pagination';
 import { ReturnUserPagination } from './interface/ReturnUserPagination';
 import { ReturnUserPaginationById } from './interface/ReturnUserPaginationById';
-import { Environment } from 'src/enums/role.environment';
+import { Environment } from '../enums/role.environment';
 import { ReturnUserPautaPagination } from './interface/ReturnUserPautaPagination';
 
 @Injectable()

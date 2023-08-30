@@ -15,10 +15,10 @@ import { CreateCameraDto } from './dtos/createCamera.dto';
 import { CameraEntity } from './entities/camera.entity';
 import { ReturnCameraDto } from './dtos/ReturnCamera.dto';
 import { UpdateCameraDto } from './dtos/UpdateCamera.dto';
-import { UserType } from 'src/user/enums/role.enum';
-import { Roles } from 'src/decorator/roles.decorator';
+import { UserType } from '../user/enums/role.enum';
+import { Roles } from '../decorator/roles.decorator';
 import { ReturnCameraPagination } from './interface/ReturnCameraPagination';
-import { Environment } from 'src/enums/role.environment';
+import { Environment } from '../enums/role.environment';
 
 @Roles(UserType.Admin)
 @Controller('camera')

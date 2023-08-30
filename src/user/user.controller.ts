@@ -14,14 +14,14 @@ import { UserEntity } from './entities/user.entity';
 import { CreateUserDto } from './dtos/CreateUser.dto';
 import { UserService } from './users.service';
 import { ReturnUserDto } from './dtos/ReturnUser.dto';
-import { Roles } from 'src/decorator/roles.decorator';
+import { Roles } from '../decorator/roles.decorator';
 import { UserType } from './enums/role.enum';
 import { UpdateUserDto } from './dtos/UpdateUser.dto';
-import { UserId } from 'src/decorator/user-id.decorator';
+import { UserId } from '../decorator/user-id.decorator';
 import { ReturnUserPagination } from './interface/ReturnUserPagination';
-import { ReturnPautaDto } from 'src/pauta/dtos/ReturnPauta.dto';
+import { ReturnPautaDto } from '../pauta/dtos/ReturnPauta.dto';
 import { ReturnUserPaginationById } from './interface/ReturnUserPaginationById';
-import { Environment } from 'src/enums/role.environment';
+import { Environment } from '../enums/role.environment';
 import { ReturnUserPautaPagination } from './interface/ReturnUserPautaPagination';
 
 //@Roles(UserType.User, UserType.UserIntermediary, UserType.Admin)

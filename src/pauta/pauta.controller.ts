@@ -10,12 +10,12 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ReturnCameraDto } from 'src/camera/dtos/ReturnCamera.dto';
-import { Roles } from 'src/decorator/roles.decorator';
-import { UserId } from 'src/decorator/user-id.decorator';
-import { ReturnUserDto } from 'src/user/dtos/ReturnUser.dto';
-import { UserType } from 'src/user/enums/role.enum';
-import { ReturnVehicleDto } from 'src/vehiche/dtos/ReturnVehicle.dto';
+import { ReturnCameraDto } from '../camera/dtos/ReturnCamera.dto';
+import { Roles } from '../decorator/roles.decorator';
+import { UserId } from '../decorator/user-id.decorator';
+import { ReturnUserDto } from '../user/dtos/ReturnUser.dto';
+import { UserType } from '../user/enums/role.enum';
+import { ReturnVehicleDto } from '../vehiche/dtos/ReturnVehicle.dto';
 import { CreatePautaDto } from './dtos/CreatePauta.dto';
 import { ReturnPautaDto } from './dtos/ReturnPauta.dto';
 import { UpdatePautaDto } from './dtos/UpdatePauta.dto';

@@ -1,4 +1,4 @@
-import { ReturnPautaDto } from 'src/pauta/dtos/ReturnPauta.dto';
+import { ReturnPautaDto } from '../../pauta/dtos/ReturnPauta.dto';
 import { VehicleEntity } from '../entities/vehicle.entity';
 
 export class ReturnVehicleDto {

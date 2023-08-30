@@ -1,6 +1,6 @@
-import { ReturnCameraDto } from 'src/camera/dtos/ReturnCamera.dto';
-import { ReturnUserDto } from 'src/user/dtos/ReturnUser.dto';
-import { ReturnVehicleDto } from 'src/vehiche/dtos/ReturnVehicle.dto';
+import { ReturnCameraDto } from '../../camera/dtos/ReturnCamera.dto';
+import { ReturnUserDto } from '../../user/dtos/ReturnUser.dto';
+import { ReturnVehicleDto } from '../../vehiche/dtos/ReturnVehicle.dto';
 import { PautaEntity } from '../entities/pauta.entity';
 
 export class ReturnPautaDto {

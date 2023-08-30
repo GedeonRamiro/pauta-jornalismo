@@ -1,8 +1,8 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CameraModule } from 'src/camera/camera.module';
-import { UsersModule } from 'src/user/users.module';
-import { VehicleModule } from 'src/vehiche/vehicle.module';
+import { CameraModule } from '../camera/camera.module';
+import { UsersModule } from '../user/users.module';
+import { VehicleModule } from '../vehiche/vehicle.module';
 import { PautaEntity } from './entities/pauta.entity';
 import { PautaController } from './pauta.controller';
 import { PautaService } from './pauta.service';

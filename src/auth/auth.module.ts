@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { CameraModule } from 'src/camera/camera.module';
-import { UsersModule } from 'src/user/users.module';
+import { CameraModule } from '../camera/camera.module';
+import { UsersModule } from '../user/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 

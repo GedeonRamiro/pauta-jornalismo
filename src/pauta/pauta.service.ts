@@ -4,17 +4,17 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CameraService } from 'src/camera/camera.service';
-import { ReturnOfficeDto } from 'src/office/dtos/ReturnOffice.dto';
-import { UserService } from 'src/user/users.service';
-import { VehicleService } from 'src/vehiche/vehicle.service';
+import { CameraService } from '../camera/camera.service';
+import { ReturnOfficeDto } from '../office/dtos/ReturnOffice.dto';
+import { UserService } from '../user/users.service';
+import { VehicleService } from '../vehiche/vehicle.service';
 import { Like, Repository } from 'typeorm';
 import { CreatePautaDto } from './dtos/CreatePauta.dto';
 import { ReturnTeamDto } from './dtos/ReturnTeam.dto';
 import { UpdatePautaDto } from './dtos/UpdatePauta.dto';
 import { PautaEntity } from './entities/pauta.entity';
 import { ReturnPautaPagination } from './interface/ReturnPautaPagination';
-import { createPagination } from 'src/utils/pagination';
+import { createPagination } from '../utils/pagination';
 
 @Injectable()
 export class PautaService {

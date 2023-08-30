@@ -1,5 +1,5 @@
-import { ReturnOfficeDto } from 'src/office/dtos/ReturnOffice.dto';
-import { ReturnPautaDto } from 'src/pauta/dtos/ReturnPauta.dto';
+import { ReturnOfficeDto } from '../../office/dtos/ReturnOffice.dto';
+import { ReturnPautaDto } from '../../pauta/dtos/ReturnPauta.dto';
 import { UserEntity } from '../entities/user.entity';
 
 export class ReturnUserDto {

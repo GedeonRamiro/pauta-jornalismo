@@ -10,8 +10,8 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { Roles } from 'src/decorator/roles.decorator';
-import { UserType } from 'src/user/enums/role.enum';
+import { Roles } from '../decorator/roles.decorator';
+import { UserType } from '../user/enums/role.enum';
 import { CreateOfficeDto } from './dtos/CreateOffice.dto';
 import { ReturnOfficeDto } from './dtos/ReturnOffice.dto';
 import { UpdateOfficeDto } from './dtos/UpdateOffice.dto';

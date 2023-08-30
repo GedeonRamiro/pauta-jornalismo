@@ -1,6 +1,6 @@
-import { CameraEntity } from 'src/camera/entities/camera.entity';
-import { UserEntity } from 'src/user/entities/user.entity';
-import { VehicleEntity } from 'src/vehiche/entities/vehicle.entity';
+import { CameraEntity } from '../../camera/entities/camera.entity';
+import { UserEntity } from '../../user/entities/user.entity';
+import { VehicleEntity } from '../../vehiche/entities/vehicle.entity';
 import {
   Column,
   CreateDateColumn,

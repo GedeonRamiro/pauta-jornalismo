@@ -10,8 +10,8 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { Roles } from 'src/decorator/roles.decorator';
-import { UserType } from 'src/user/enums/role.enum';
+import { Roles } from '../decorator/roles.decorator';
+import { UserType } from '../user/enums/role.enum';
 import { CreateVehicleDto } from './dtos/CreateVehicle.dto';
 import { ReturnVehicleDto } from './dtos/ReturnVehicle.dto';
 import { UpDateVehicleDto } from './dtos/UpdateVehicle.dto';

@@ -1,4 +1,4 @@
-import { ReturnPautaDto } from 'src/pauta/dtos/ReturnPauta.dto';
+import { ReturnPautaDto } from '../../pauta/dtos/ReturnPauta.dto';
 import { CameraEntity } from '../entities/camera.entity';
 
 export class ReturnCameraDto {

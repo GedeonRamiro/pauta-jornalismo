@@ -10,7 +10,7 @@ import { VehicleEntity } from './entities/vehicle.entity';
 import { CreateVehicleDto } from './dtos/CreateVehicle.dto';
 import { UpDateVehicleDto } from './dtos/UpdateVehicle.dto';
 import { ReturnVehichePagination } from './interface/ReturnVehichePagination';
-import { createPagination } from 'src/utils/pagination';
+import { createPagination } from '../utils/pagination';
 
 @Injectable()
 export class VehicleService {

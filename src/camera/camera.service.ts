@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { createPagination } from 'src/utils/pagination';
+import { createPagination } from '../utils/pagination';
 import { Like, Repository } from 'typeorm';
 import { CreateCameraDto } from './dtos/createCamera.dto';
 import { UpdateCameraDto } from './dtos/UpdateCamera.dto';

@@ -3,7 +3,7 @@ import {
   createParamDecorator,
   ForbiddenException,
 } from '@nestjs/common';
-import { authorizantionToLoginPayload } from 'src/utils/base-64-converter';
+import { authorizantionToLoginPayload } from '../utils/base-64-converter';
 
 export const UserId = createParamDecorator((_, ctx: ExecutionContext) => {
   const { authorization } = ctx.switchToHttp().getRequest().headers;

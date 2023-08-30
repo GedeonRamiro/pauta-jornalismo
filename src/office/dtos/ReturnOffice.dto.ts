@@ -1,4 +1,4 @@
-import { ReturnUserDto } from 'src/user/dtos/ReturnUser.dto';
+import { ReturnUserDto } from '../../user/dtos/ReturnUser.dto';
 import { OfficeEntity } from '../entities/office.entity';
 
 export class ReturnOfficeDto {

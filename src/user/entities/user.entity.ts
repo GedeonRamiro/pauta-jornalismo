@@ -1,5 +1,5 @@
-import { OfficeEntity } from 'src/office/entities/office.entity';
-import { PautaEntity } from 'src/pauta/entities/pauta.entity';
+import { OfficeEntity } from '../../office/entities/office.entity';
+import { PautaEntity } from '../../pauta/entities/pauta.entity';
 import {
   Column,
   Entity,

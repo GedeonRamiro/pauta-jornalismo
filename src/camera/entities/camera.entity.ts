@@ -1,4 +1,4 @@
-import { PautaEntity } from 'src/pauta/entities/pauta.entity';
+import { PautaEntity } from '../../pauta/entities/pauta.entity';
 import {
   Column,
   CreateDateColumn,
