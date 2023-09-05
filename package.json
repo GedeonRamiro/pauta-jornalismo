@@ -21,7 +21,8 @@
     "typeorm:ts": "typeorm-ts-node-esm",
     "migrate:up": "npm run typeorm:ts migration:run -- -d ./typeorm/data-source.ts",
     "migrate:down": "npm run typeorm:ts migration:revert -- -d ./typeorm/data-source.ts",
-    "migrate:create": "npm run typeorm:ts migration:create -- ./typeorm/migrations/AddColumOTeamTablePauta"
+    "migrate:create": "npm run typeorm:ts migration:create -- ./typeorm/migrations/AddColumOTeamTablePauta",
+    "vercel-biuld": "npx typeorm migrate deploy"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
