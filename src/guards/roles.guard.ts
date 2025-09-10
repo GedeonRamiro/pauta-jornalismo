@@ -22,10 +22,17 @@ export class RolesGuard implements CanActivate {
       return true;
     }
 
-    const { authorization } = context.switchToHttp().getRequest().headers;
+    const request = context.switchToHttp().getRequest();
+    const authHeader = request.headers['authorization'];
+
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return false;
+    }
+
+    const token = authHeader.replace('Bearer ', '').trim();
 
     const loginPayload: LoginPayloadDto | undefined = await this.jwtService
-      .verifyAsync(authorization, {
+      .verifyAsync(token, {
         secret: process.env.JWT_SECRET,
       })
       .catch(() => undefined);
@@ -34,6 +41,6 @@ export class RolesGuard implements CanActivate {
       return false;
     }
 
-    return requiredRoles.some((role) => role === loginPayload.typeUser);
+    return requiredRoles.includes(Number(loginPayload.typeUser));
   }
 }

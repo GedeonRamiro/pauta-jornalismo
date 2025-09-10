@@ -24,7 +24,6 @@ import { ReturnUserPaginationById } from './interface/ReturnUserPaginationById';
 import { Environment } from '../enums/role.environment';
 import { ReturnUserPautaPagination } from './interface/ReturnUserPautaPagination';
 
-//@Roles(UserType.User, UserType.UserIntermediary, UserType.Admin)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -52,14 +51,12 @@ export class UserController {
   }
 
   @Roles(UserType.Admin, UserType.UserIntermediary)
-  @Roles(UserType.Admin)
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<ReturnUserDto> {
     return new ReturnUserDto(await this.userService.getUserById(id));
   }
 
   @Roles(UserType.Admin, UserType.UserIntermediary)
-  @Roles(UserType.Admin)
   @Get('pagination/:id')
   async getUserPautaCreateById(
     @Param('id') id: string,

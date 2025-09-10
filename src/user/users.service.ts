@@ -139,11 +139,14 @@ export class UserService {
 
     if (!user) throw new NotFoundException(`Usuário ou página não existe!`);
 
-    const pauta = (await this.pautaService.getAllPauta())
-      .map((team) =>
-        JSON.parse(team.team).includes(user.id) ? team : undefined,
-      )
-      .filter((team) => team ?? team);
+    const pauta = (await this.pautaService.getAllPauta()).flatMap((item) => {
+      try {
+        const parsed = JSON.parse(item.team);
+        return Array.isArray(parsed) && parsed.includes(user.id) ? [item] : [];
+      } catch {
+        return [];
+      }
+    });
 
     const pagination = createPagination(
       Environment.LINE_LIMIT,
@@ -155,6 +158,9 @@ export class UserService {
   }
 
   async findUserByEmail(email: string): Promise<UserEntity> {
+    if (!email) {
+      throw new NotFoundException(`Email: ${email} Not Found`);
+    }
     const user = await this.userRepository.findOne({
       where: {
         email,
@@ -189,6 +195,9 @@ export class UserService {
   }
 
   async isMatchPassword(password: string) {
+    if (!password) {
+      throw new NotFoundException(`Password: ${password} Not Found`);
+    }
     const user = await this.userRepository.findOne({
       where: {
         password,

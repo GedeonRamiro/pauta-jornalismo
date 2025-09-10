@@ -26,7 +26,7 @@ export class PautaService {
     private readonly cameraService: CameraService,
   ) {}
 
-  async createPauta(
+  /*     async createPauta(
     createPautaDto: CreatePautaDto,
     userId: string,
   ): Promise<PautaEntity> {
@@ -35,6 +35,23 @@ export class PautaService {
     await this.cameraService.getCameraById(createPautaDto.cameraId);
 
     await this.getAllTeam(JSON.stringify(createPautaDto.team));
+
+    return await this.pautaRepository.save({
+      ...createPautaDto,
+      team: JSON.stringify(createPautaDto.team),
+      userId,
+    });
+  }  */
+
+  async createPauta(
+    createPautaDto: CreatePautaDto,
+    userId: string,
+  ): Promise<PautaEntity> {
+    await this.userService.getUserById(userId);
+    await this.vehicleService.getVehicleById(createPautaDto.vehicleId);
+    await this.cameraService.getCameraById(createPautaDto.cameraId);
+
+    await this.getAllTeam(createPautaDto.team);
 
     return await this.pautaRepository.save({
       ...createPautaDto,
@@ -76,26 +93,28 @@ export class PautaService {
     };
   }
 
-  async getAllTeam(team: string): Promise<ReturnTeamDto[] | null> {
-    const teamParseJSON = JSON.parse(team);
+  private async getAllTeam(team: any): Promise<ReturnTeamDto[] | null> {
+    if (typeof team === 'string') {
+      try {
+        team = JSON.parse(team);
+      } catch {
+        return null;
+      }
+    }
 
-    let teams;
-    return teamParseJSON
-      ? await Promise.all(
-          teamParseJSON.map(async (team: string) => {
-            const data = await this.userService.getUserById(team);
+    if (!Array.isArray(team)) return null;
 
-            teams = {
-              id: data.id,
-              name: data.name,
-              office: data.office
-                ? new ReturnOfficeDto(data.office)
-                : undefined,
-            };
-            return teams;
-          }),
-        )
-      : null;
+    return await Promise.all(
+      team.map(async (id: string) => {
+        const user = await this.userService.getUserById(id);
+
+        return {
+          id: user.id,
+          name: user.name,
+          office: user.office ? new ReturnOfficeDto(user.office) : undefined,
+        };
+      }),
+    );
   }
 
   async getPautaById(id: string): Promise<PautaEntity> {
