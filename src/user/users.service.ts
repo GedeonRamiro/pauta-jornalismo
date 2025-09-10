@@ -33,8 +33,10 @@ export class UserService {
 
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     //const saltOrRounds = 10;
+    const saltOrRounds = 10;
 
     /* const passwordHashed = await hash(createUserDto.password, saltOrRounds); */
+    const passwordHashed = await hash(createUserDto.password, saltOrRounds);
 
     await this.existEmail(createUserDto.email);
     await this.officeService.getOfficeById(createUserDto.office_id);
@@ -43,6 +45,7 @@ export class UserService {
       ...createUserDto,
       typeUser: UserType.User,
       /* password: passwordHashed, */
+      password: passwordHashed,
     });
   }
 
