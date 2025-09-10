@@ -26,23 +26,6 @@ export class PautaService {
     private readonly cameraService: CameraService,
   ) {}
 
-  /*     async createPauta(
-    createPautaDto: CreatePautaDto,
-    userId: string,
-  ): Promise<PautaEntity> {
-    await this.userService.getUserById(userId);
-    await this.vehicleService.getVehicleById(createPautaDto.vehicleId);
-    await this.cameraService.getCameraById(createPautaDto.cameraId);
-
-    await this.getAllTeam(JSON.stringify(createPautaDto.team));
-
-    return await this.pautaRepository.save({
-      ...createPautaDto,
-      team: JSON.stringify(createPautaDto.team),
-      userId,
-    });
-  }  */
-
   async createPauta(
     createPautaDto: CreatePautaDto,
     userId: string,
