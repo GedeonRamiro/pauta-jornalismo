@@ -51,6 +51,25 @@ export class VehicleService {
     };
   }
 
+  async getAllVehicleNoPagination(): Promise<{
+    data: VehicleEntity[];
+    count: number;
+  }> {
+    const [result, count] = await this.vehicleRepository.findAndCount({
+      order: {
+        createdAt: 'DESC',
+      },
+      relations: {
+        pauta: true,
+      },
+    });
+
+    return {
+      data: result,
+      count,
+    };
+  }
+
   async getVehicleById(id: string): Promise<VehicleEntity> {
     const vehicle = await this.vehicleRepository.findOne({
       where: { id },
