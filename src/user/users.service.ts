@@ -33,10 +33,8 @@ export class UserService {
 
   async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     //const saltOrRounds = 10;
-    const saltOrRounds = 10;
 
     /* const passwordHashed = await hash(createUserDto.password, saltOrRounds); */
-    const passwordHashed = await hash(createUserDto.password, saltOrRounds);
 
     await this.existEmail(createUserDto.email);
     await this.officeService.getOfficeById(createUserDto.office_id);
@@ -45,7 +43,6 @@ export class UserService {
       ...createUserDto,
       typeUser: UserType.User,
       /* password: passwordHashed, */
-      password: passwordHashed,
     });
   }
 
@@ -75,9 +72,26 @@ export class UserService {
     };
   }
 
+  async getAllUserNoPagination(): Promise<{
+    data: UserEntity[];
+    count: number;
+  }> {
+    const [result, count] = await this.userRepository.findAndCount({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    return {
+      data: result,
+      count,
+    };
+  }
+
   async getUserById(id: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({
       where: { id },
+      relations: ['pauta', 'office'],
     });
     if (!user) throw new NotFoundException(`User com id: ${id} não existe!`);
     return user;

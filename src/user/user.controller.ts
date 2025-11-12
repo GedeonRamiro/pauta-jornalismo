@@ -50,6 +50,21 @@ export class UserController {
     return { ...resultUser, data: user };
   }
 
+  @Get('nopagination')
+  async getAllUserNoPagination(): Promise<{
+    data: ReturnUserDto[];
+    count: number;
+  }> {
+    const resultUser = await this.userService.getAllUserNoPagination();
+
+    const users = resultUser.data.map((user) => new ReturnUserDto(user));
+
+    return {
+      data: users,
+      count: resultUser.count,
+    };
+  }
+
   @Roles(UserType.Admin, UserType.UserIntermediary)
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<ReturnUserDto> {
