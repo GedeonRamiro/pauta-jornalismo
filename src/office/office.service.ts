@@ -11,6 +11,7 @@ import { CreateOfficeDto } from './dtos/CreateOffice.dto';
 import { UpdateOfficeDto } from './dtos/UpdateOffice.dto';
 import { OfficeEntity } from './entities/office.entity';
 import { ReturnOfficePagination } from './interface/ReturnOfficePagination';
+import { ReturnOfficeDto } from './dtos/ReturnOffice.dto';
 
 @Injectable()
 export class OfficeService {
@@ -46,6 +47,22 @@ export class OfficeService {
     return {
       data: [...result],
       ...pagination,
+    };
+  }
+
+  async getAllOfficeNoPagination(): Promise<{
+    data: OfficeEntity[];
+    count: number;
+  }> {
+    const [result, count] = await this.officeRepository.findAndCount({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    return {
+      data: result,
+      count,
     };
   }
 
