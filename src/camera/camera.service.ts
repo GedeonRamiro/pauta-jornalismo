@@ -50,6 +50,22 @@ export class CameraService {
     };
   }
 
+  async getAllCameraNoPagination(): Promise<{
+    data: CameraEntity[];
+    count: number;
+  }> {
+    const [result, count] = await this.cameraRepository.findAndCount({
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    return {
+      data: result,
+      count,
+    };
+  }
+
   async getCameraById(id: string): Promise<CameraEntity> {
     const camera = await this.cameraRepository.findOne({
       where: { id },
