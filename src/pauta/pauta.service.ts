@@ -62,7 +62,10 @@ export class PautaService {
 
     const skip = (page - 1) * limit;
     const [result, total] = await this.pautaRepository.findAndCount({
-      where: { name: Like('%' + filter + '%') },
+      where: [
+        { name: Like('%' + filter + '%') },
+        { infomation: Like(`%${filter}%`) },
+      ],
       take: limit,
       skip: skip,
       order: {
