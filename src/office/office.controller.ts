@@ -49,6 +49,23 @@ export class OfficeController {
     return { ...resultOffice, data: office };
   }
 
+  @Get('nopagination')
+  async getAllOfficeNoPagination(): Promise<{
+    data: ReturnOfficeDto[];
+    count: number;
+  }> {
+    const resultOffice = await this.officeService.getAllOfficeNoPagination();
+
+    const offices = resultOffice.data.map(
+      (office) => new ReturnOfficeDto(office),
+    );
+
+    return {
+      data: offices,
+      count: resultOffice.count,
+    };
+  }
+
   @Get(':id')
   async getOfficeById(@Param('id') id: string): Promise<ReturnOfficeDto> {
     return new ReturnOfficeDto(await this.officeService.getOfficeById(id));
