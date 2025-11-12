@@ -38,6 +38,7 @@ export class PautaController {
     return await this.pautaService.createPauta(createPauta, userId);
   }
 
+  @Roles(UserType.UserIntermediary, UserType.Admin)
   @Get()
   async getAllPauta(
     @Query() { limit, page, filter },
@@ -63,6 +64,7 @@ export class PautaController {
       id: pauta.id,
       name: pauta.name,
       infomation: pauta.infomation,
+      createdAt: pauta.createdAt,
       user: new ReturnUserDto(pauta.user),
       camera: pauta.camera ? new ReturnCameraDto(pauta.camera) : null,
       vehicle: pauta.vehicle ? new ReturnVehicleDto(pauta.vehicle) : null,
@@ -91,6 +93,7 @@ export class PautaController {
       id: pauta.id,
       name: pauta.name,
       infomation: pauta.infomation,
+      createdAt: pauta.createdAt,
       user: new ReturnUserDto(pauta.user),
       camera: pauta.camera ? new ReturnCameraDto(pauta.camera) : null,
       vehicle: pauta.vehicle ? new ReturnVehicleDto(pauta.vehicle) : null,
