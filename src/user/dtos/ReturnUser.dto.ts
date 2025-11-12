@@ -8,6 +8,7 @@ export class ReturnUserDto {
   email: string;
   phone: string;
   cpf: string;
+  typeUser?: number;
   office: ReturnOfficeDto;
   pauta: ReturnPautaDto[];
 
@@ -17,6 +18,7 @@ export class ReturnUserDto {
     this.email = user.email;
     this.phone = user.phone;
     this.cpf = user.cpf;
+    this.typeUser = user.typeUser;
     this.office = user.office ? new ReturnOfficeDto(user.office) : undefined;
     this.pauta = user.pauta
       ? user.pauta.map((pauta) => new ReturnPautaDto(pauta))

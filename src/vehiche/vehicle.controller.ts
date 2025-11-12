@@ -51,6 +51,23 @@ export class VehicleController {
     return { ...resultVehice, data: vehicle };
   }
 
+  @Get('nopagination')
+  async getAllVehicleNoPagination(): Promise<{
+    data: ReturnVehicleDto[];
+    count: number;
+  }> {
+    const resultVehicle = await this.vehicleService.getAllVehicleNoPagination();
+
+    const Vehicles = resultVehicle.data.map(
+      (vehicle) => new ReturnVehicleDto(vehicle),
+    );
+
+    return {
+      data: Vehicles,
+      count: resultVehicle.count,
+    };
+  }
+
   @Roles(UserType.Admin, UserType.UserIntermediary)
   @Get(':id')
   async getUserById(@Param('id') id: string): Promise<ReturnVehicleDto> {
