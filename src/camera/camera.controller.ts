@@ -51,6 +51,23 @@ export class CameraController {
     return { ...resultCamera, data: camera };
   }
 
+  @Get('nopagination')
+  async getAllCameraNoPagination(): Promise<{
+    data: ReturnCameraDto[];
+    count: number;
+  }> {
+    const resultCanera = await this.cameraService.getAllCameraNoPagination();
+
+    const cameras = resultCanera.data.map(
+      (camera) => new ReturnCameraDto(camera),
+    );
+
+    return {
+      data: cameras,
+      count: resultCanera.count,
+    };
+  }
+
   @Roles(UserType.Admin, UserType.UserIntermediary)
   @Get(':id')
   async getCameraById(@Param('id') id: string): Promise<ReturnCameraDto> {
