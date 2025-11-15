@@ -58,6 +58,7 @@ export class OfficeService {
       order: {
         createdAt: 'DESC',
       },
+      relations: { user: true },
     });
 
     return {

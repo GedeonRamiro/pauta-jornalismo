@@ -80,6 +80,10 @@ export class UserService {
       order: {
         createdAt: 'DESC',
       },
+      relations: {
+        pauta: true,
+        office: true,
+      },
     });
 
     return {

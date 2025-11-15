@@ -58,6 +58,9 @@ export class CameraService {
       order: {
         createdAt: 'DESC',
       },
+      relations: {
+        pauta: true,
+      },
     });
 
     return {
