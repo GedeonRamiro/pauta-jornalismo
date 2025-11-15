@@ -56,6 +56,21 @@ export class PautaController {
     return { ...resultPauta, data: pauta };
   }
 
+  @Get('nopagination')
+  async getAllPautaNoPagination(): Promise<{
+    data: ReturnPautaDto[];
+    count: number;
+  }> {
+    const resultPauta = await this.pautaService.getAllPautaNoPagination();
+
+    const pautas = resultPauta.data.map((pauta) => new ReturnPautaDto(pauta));
+
+    return {
+      data: pautas,
+      count: resultPauta.count,
+    };
+  }
+
   @Get(':id')
   async getPautaById(@Param('id') id: string): Promise<ReturnPautaDto> {
     const pauta = await this.pautaService.getPautaById(id);

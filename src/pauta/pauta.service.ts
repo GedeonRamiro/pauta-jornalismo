@@ -79,6 +79,27 @@ export class PautaService {
     };
   }
 
+  async getAllPautaNoPagination(): Promise<{
+    data: PautaEntity[];
+    count: number;
+  }> {
+    const [result, count] = await this.pautaRepository.findAndCount({
+      order: {
+        createdAt: 'DESC',
+      },
+      relations: {
+        user: true,
+        camera: true,
+        vehicle: true,
+      },
+    });
+
+    return {
+      data: result,
+      count,
+    };
+  }
+
   private async getAllTeam(team: any): Promise<ReturnTeamDto[] | null> {
     if (typeof team === 'string') {
       try {
