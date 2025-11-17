@@ -7,7 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { createPagination } from '../utils/pagination';
 import { Like, Repository } from 'typeorm';
-import { CreateCameraDto } from './dtos/createCamera.dto';
+import { CreateCameraDto } from './dtos/CreateCamera.dto';
 import { UpdateCameraDto } from './dtos/UpdateCamera.dto';
 import { CameraEntity } from './entities/camera.entity';
 import { ReturnCameraPagination } from './interface/ReturnCameraPagination';

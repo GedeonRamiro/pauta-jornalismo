@@ -5,7 +5,7 @@ import {
   IsOptional,
   MinLength,
 } from 'class-validator';
-import { CreateCameraDto } from './createCamera.dto';
+import { CreateCameraDto } from './CreateCamera.dto';
 
 export class UpdateCameraDto extends CreateCameraDto {
   @IsOptional()

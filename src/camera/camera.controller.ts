@@ -11,7 +11,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { CameraService } from './camera.service';
-import { CreateCameraDto } from './dtos/createCamera.dto';
+import { CreateCameraDto } from './dtos/CreateCamera.dto';
 import { CameraEntity } from './entities/camera.entity';
 import { ReturnCameraDto } from './dtos/ReturnCamera.dto';
 import { UpdateCameraDto } from './dtos/UpdateCamera.dto';
