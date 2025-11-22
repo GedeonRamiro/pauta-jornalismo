@@ -51,6 +51,7 @@ export class VehicleController {
     return { ...resultVehice, data: vehicle };
   }
 
+  @Roles(UserType.Admin, UserType.UserIntermediary, UserType.User)
   @Get('nopagination')
   async getAllVehicleNoPagination(): Promise<{
     data: ReturnVehicleDto[];

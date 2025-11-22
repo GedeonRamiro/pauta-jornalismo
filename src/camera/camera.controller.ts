@@ -51,6 +51,7 @@ export class CameraController {
     return { ...resultCamera, data: camera };
   }
 
+  @Roles(UserType.Admin, UserType.UserIntermediary, UserType.User)
   @Get('nopagination')
   async getAllCameraNoPagination(): Promise<{
     data: ReturnCameraDto[];
