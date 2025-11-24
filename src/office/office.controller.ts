@@ -49,6 +49,7 @@ export class OfficeController {
     return { ...resultOffice, data: office };
   }
 
+  @Roles(UserType.Admin, UserType.UserIntermediary, UserType.User)
   @Get('nopagination')
   async getAllOfficeNoPagination(): Promise<{
     data: ReturnOfficeDto[];

@@ -50,6 +50,7 @@ export class UserController {
     return { ...resultUser, data: user };
   }
 
+  @Roles(UserType.Admin, UserType.UserIntermediary, UserType.User)
   @Get('nopagination')
   async getAllUserNoPagination(): Promise<{
     data: ReturnUserDto[];
